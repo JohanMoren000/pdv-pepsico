@@ -808,7 +808,7 @@ async function syncPending() {
     setSyncBar('offline', `Sin conexión · ${pending.length} pendiente${pending.length>1?'s':''}`);
     return;
   }
-  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbzbKUnBiXBnQjmN0QfkVzlcAmIG6md6nB36620Ct5EytdJPkaEcvK7fBlAEJLffiiJJ/exec') {
+  if (APPS_SCRIPT_URL === '') {
     setSyncBar('offline', `Local only — configurar Google Sheets`);
     return;
   }
@@ -1331,7 +1331,7 @@ document.getElementById('form-bottom').style.display = 'flex';
 // Estado de conexión inicial
 if (!navigator.onLine) {
   setSyncBar('offline', `Sin conexión · ${pending.length} pendiente${pending.length>1?'s':''}`);
-} else if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbzbKUnBiXBnQjmN0QfkVzlcAmIG6md6nB36620Ct5EytdJPkaEcvK7fBlAEJLffiiJJ/exec') {
+} else if (APPS_SCRIPT_URL === '') {
   setSyncBar('offline', 'Almacenamiento local · Google Sheets no configurado');
 } else if (pending.length > 0) {
   setSyncBar('pending', `${pending.length} registro${pending.length>1?'s':''} pendiente${pending.length>1?'s':''} de sync`);
