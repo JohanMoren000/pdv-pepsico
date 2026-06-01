@@ -740,7 +740,7 @@ input,select,textarea,button{
 /* ============================================================
    CONFIGURACIÓN — IMPORTANTE: completar con tu URL de Apps Script
    ============================================================ */
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBkrQ2ilndQGOFcrxZHmVqubPw5NCk03oozjMPIK8ahFS0xftfWBUONF9YFX8Vxcs6/exec'; // <-- Reemplazar con la URL del Web App
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzbKUnBiXBnQjmN0QfkVzlcAmIG6md6nB36620Ct5EytdJPkaEcvK7fBlAEJLffiiJJ/exec'; // <-- Reemplazar con la URL del Web App
 const STORAGE_KEY = 'pdv_clients_v2';
 const PENDING_KEY = 'pdv_pending_v2';
 
@@ -808,7 +808,7 @@ async function syncPending() {
     setSyncBar('offline', `Sin conexión · ${pending.length} pendiente${pending.length>1?'s':''}`);
     return;
   }
-  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbyBkrQ2ilndQGOFcrxZHmVqubPw5NCk03oozjMPIK8ahFS0xftfWBUONF9YFX8Vxcs6/exec') {
+  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbzbKUnBiXBnQjmN0QfkVzlcAmIG6md6nB36620Ct5EytdJPkaEcvK7fBlAEJLffiiJJ/exec') {
     setSyncBar('offline', `Local only — configurar Google Sheets`);
     return;
   }
@@ -1331,7 +1331,7 @@ document.getElementById('form-bottom').style.display = 'flex';
 // Estado de conexión inicial
 if (!navigator.onLine) {
   setSyncBar('offline', `Sin conexión · ${pending.length} pendiente${pending.length>1?'s':''}`);
-} else if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbyBkrQ2ilndQGOFcrxZHmVqubPw5NCk03oozjMPIK8ahFS0xftfWBUONF9YFX8Vxcs6/exec') {
+} else if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbzbKUnBiXBnQjmN0QfkVzlcAmIG6md6nB36620Ct5EytdJPkaEcvK7fBlAEJLffiiJJ/exec') {
   setSyncBar('offline', 'Almacenamiento local · Google Sheets no configurado');
 } else if (pending.length > 0) {
   setSyncBar('pending', `${pending.length} registro${pending.length>1?'s':''} pendiente${pending.length>1?'s':''} de sync`);
