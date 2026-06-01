@@ -786,6 +786,25 @@ function loadData() {
 
 async function loadFromSheets() {
 
+     console.log("LOAD SHEETS INICIADO");
+
+  const response = await fetch(APPS_SCRIPT_URL,{
+    method:'POST',
+    headers:{
+      'Content-Type':'text/plain'
+    },
+    body:JSON.stringify({
+      action:'getAll'
+    })
+  });
+
+  console.log("RESPONSE", response);
+
+  const result = await response.json();
+
+  console.log("RESULT", result);
+
+
   if (APPS_SCRIPT_URL === 'TU_URL_AQUI') return;
 
   try {
