@@ -784,6 +784,44 @@ function loadData() {
   }
 }
 
+async function loadFromSheets() {
+
+  if (APPS_SCRIPT_URL === 'TU_URL_AQUI') return;
+
+  try {
+
+    const response = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/plain'
+      },
+      body: JSON.stringify({
+        action: 'getAll'
+      })
+    });
+
+    const result = await response.json();
+
+    if (result.status === 'ok') {
+
+      clients = result.data.map(c => ({
+        ...c,
+        synced: true
+      }));
+
+      saveLocal();
+
+      renderDash();
+      renderList();
+
+      console.log('Clientes cargados desde Sheets:', clients.length);
+    }
+
+  } catch(err) {
+    console.error('Error leyendo Google Sheets:', err);
+  }
+}
+
 function saveLocal() {
   const ok = lsSet(STORAGE_KEY, clients);
   if (!ok) showToast('⚠ Almacenamiento lleno — liberá espacio', 'warn');
@@ -1058,6 +1096,8 @@ function saveClient() {
   showToast('✓ ' + client.nombre + ' guardado', 'success');
   resetForm();
   syncPending();
+   
+  setTimeout(loadFromSheets,1500);
 }
 
 /* ============================================================
@@ -1312,20 +1352,60 @@ async function retrySingle(syncId) {
   renderList();
 }
 
-function deleteClient(syncId) {
-  if (!confirm('¿Eliminar este cliente? Esta acción no se puede deshacer.')) return;
-  clients = clients.filter(c => c.syncId !== syncId);
-  pending = pending.filter(p => p.syncId !== syncId);
-  saveLocal();
-  closeModal();
-  renderList();
-  showToast('Cliente eliminado', 'warn');
+async function deleteClient(syncId) {
+
+  if (!confirm('¿Eliminar este cliente?')) return;
+
+  try {
+
+    const response = await fetch(APPS_SCRIPT_URL,{
+      method:'POST',
+      headers:{
+        'Content-Type':'text/plain'
+      },
+      body:JSON.stringify({
+        action:'delete',
+        syncId:syncId
+      })
+    });
+
+    const result = await response.json();
+
+    if(result.status === 'ok'){
+
+      clients = clients.filter(c => c.syncId !== syncId);
+
+      pending = pending.filter(p => p.syncId !== syncId);
+
+      saveLocal();
+
+      closeModal();
+
+      renderList();
+      renderDash();
+
+      showToast('Cliente eliminado','success');
+
+    } else {
+
+      showToast(result.message || 'Error eliminando','error');
+
+    }
+
+  } catch(err){
+
+    showToast('Error de conexión','error');
+
+  }
 }
 
 /* ============================================================
    ARRANQUE — cargar datos e iniciar sync
    ============================================================ */
 loadData();
+
+loadFromSheets();
+
 document.getElementById('form-bottom').style.display = 'flex';
 
 // Estado de conexión inicial
