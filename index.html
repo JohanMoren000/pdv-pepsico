@@ -451,7 +451,7 @@ function hideLoading() {
    API CALL — wrapper único para todas las llamadas a Sheets
    ============================================================ */
 async function apiCall(body, timeoutMs = 12000) {
-  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbzbKUnBiXBnQjmN0QfkVzlcAmIG6md6nB36620Ct5EytdJPkaEcvK7fBlAEJLffiiJJ/exec') throw new Error('URL de Apps Script no configurada');
+  if (APPS_SCRIPT_URL === '') throw new Error('URL de Apps Script no configurada');
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), timeoutMs);
   try {
@@ -486,7 +486,7 @@ async function initApp() {
     setSyncBar('pending', 'Actualizando desde Google Sheets…');
   }
 
-  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbzbKUnBiXBnQjmN0QfkVzlcAmIG6md6nB36620Ct5EytdJPkaEcvK7fBlAEJLffiiJJ/exec') {
+  if (APPS_SCRIPT_URL === '') {
     clients = cached || [];
     hideLoading();
     setSyncBar('offline', 'Apps Script no configurado — modo local');
@@ -551,7 +551,7 @@ async function flushPending(updateUI = true) {
     if (updateUI) setSyncBar('ok', `${clients.length} registros · Todo sincronizado ✓`);
     return;
   }
-  if (!navigator.onLine || APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbzbKUnBiXBnQjmN0QfkVzlcAmIG6md6nB36620Ct5EytdJPkaEcvK7fBlAEJLffiiJJ/exec') return;
+  if (!navigator.onLine || APPS_SCRIPT_URL === '') return;
 
   isSyncing = true;
   if (updateUI) setSyncBar('pending', `Sincronizando ${pending.length + pendingDel.length} operación(es)…`);
@@ -984,7 +984,7 @@ async function deleteClient(syncId) {
   showToast('Eliminado','warn');
 
   // 2. Intentar eliminar de Sheets ahora
-  if (navigator.onLine && APPS_SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbzbKUnBiXBnQjmN0QfkVzlcAmIG6md6nB36620Ct5EytdJPkaEcvK7fBlAEJLffiiJJ/exec') {
+  if (navigator.onLine && APPS_SCRIPT_URL !== '') {
     try {
       const res = await apiCall({ action:'delete', syncId });
       if (res.status==='ok'||res.status==='notfound') {
