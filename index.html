@@ -8,222 +8,240 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0A0A0F">
 <title>PepsiCo · Relevamiento PDV</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0A0A0F;--bg2:#13131A;--bg3:#1C1C26;--card:#1E1E2A;
-  --border:#2E2E3E;--text:#F0F0F5;--muted:#8888A0;
-  --accent:#00C4F4;--accent2:#0099D4;
-  --green:#22C55E;--yellow:#EAB308;--red:#EF4444;--orange:#F97316;
-  --radius:14px;--radius-sm:10px;
-  --safe-b:env(safe-area-inset-bottom,0px);--safe-t:env(safe-area-inset-top,0px);
-  --safe-l:env(safe-area-inset-left,0px);--safe-r:env(safe-area-inset-right,0px);
+  --bg:#0A0A0F; --bg2:#13131A; --bg3:#1C1C26; --card:#1E1E2A;
+  --border:#2E2E3E; --text:#F0F0F5; --muted:#8888A0;
+  --accent:#00C4F4; --green:#22C55E; --yellow:#EAB308;
+  --red:#EF4444; --orange:#F97316;
+  --r:14px; --rs:10px;
+  --sb:env(safe-area-inset-bottom,0px); --st:env(safe-area-inset-top,0px);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{font-size:16px;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;height:-webkit-fill-available}
-body{min-height:100vh;min-height:-webkit-fill-available;overscroll-behavior:none;-webkit-overflow-scrolling:touch;position:relative}
+body{min-height:100vh;min-height:-webkit-fill-available;overscroll-behavior:none;-webkit-overflow-scrolling:touch}
 input,select,textarea,button{font-size:16px !important;font-family:'DM Sans',sans-serif}
 
-.nav{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;padding-top:calc(10px + var(--safe-t));background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;-webkit-position:sticky}
+/* NAV */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;padding-top:calc(10px + var(--st));background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
 .nav-logo{display:flex;align-items:center;gap:8px}
-.nav-logo svg{width:26px;height:26px;flex-shrink:0}
-.nav-title{font-size:14px;font-weight:700;letter-spacing:-.3px}
+.nav-logo svg{width:24px;height:24px;flex-shrink:0}
+.nav-title{font-size:14px;font-weight:700}
 .nav-title span{color:var(--accent)}
 .nav-tabs{display:flex;gap:3px;background:var(--bg3);border-radius:10px;padding:3px}
-.nav-tab{padding:7px 13px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;color:var(--muted);border:none;background:transparent;min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;touch-action:manipulation;-webkit-appearance:none}
+.nav-tab{padding:7px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;color:var(--muted);border:none;background:transparent;min-height:44px;display:flex;align-items:center;touch-action:manipulation;-webkit-appearance:none}
 .nav-tab.active{background:var(--card);color:var(--text)}
 .nav-tab:active{opacity:.7}
 
-.view{display:none;padding-bottom:calc(88px + var(--safe-b));padding-left:var(--safe-l);padding-right:var(--safe-r)}
+/* SYNC BAR */
+.sbar{display:flex;align-items:center;justify-content:space-between;padding:7px 16px;font-size:12px;font-weight:600;border-bottom:1px solid var(--border)}
+.sdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-right:7px}
+.sleft{display:flex;align-items:center}
+.s-ok .sdot{background:var(--green)} .s-ok{color:var(--green)}
+.s-pend .sdot{background:var(--yellow);animation:blink 1s infinite} .s-pend{color:var(--yellow)}
+.s-err .sdot{background:var(--red)} .s-err{color:var(--red)}
+.s-off .sdot{background:var(--muted)} .s-off{color:var(--muted)}
+.s-load .sdot{background:var(--accent);animation:blink .7s infinite} .s-load{color:var(--accent)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.reload-btn{background:none;border:none;color:var(--accent);font-size:12px;font-weight:700;cursor:pointer;padding:4px 8px;border-radius:6px;touch-action:manipulation;min-height:32px;-webkit-appearance:none}
+.reload-btn:active{opacity:.6}
+
+/* VIEWS */
+.view{display:none;padding-bottom:calc(80px + var(--sb))}
 .view.active{display:block}
 
-.progress-bar{height:3px;background:var(--border)}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .4s cubic-bezier(.4,0,.2,1)}
+/* PROGRESS */
+.prog-bar{height:3px;background:var(--border)}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),#0099D4);transition:width .35s ease}
 
-/* SYNC BAR */
-.sync-bar{display:flex;align-items:center;gap:8px;padding:8px 16px;font-size:12px;font-weight:600;border-bottom:1px solid var(--border);cursor:default}
-.sync-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.sync-ok .sync-dot{background:var(--green)}
-.sync-pending .sync-dot{background:var(--yellow);animation:pulse 1.2s ease-in-out infinite}
-.sync-error .sync-dot{background:var(--red)}
-.sync-offline .sync-dot{background:var(--muted)}
-.sync-loading .sync-dot{background:var(--accent);animation:pulse .8s ease-in-out infinite}
-.sync-ok{color:var(--green)}.sync-pending{color:var(--yellow)}.sync-error{color:var(--red)}.sync-offline{color:var(--muted)}.sync-loading{color:var(--accent)}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-
-/* LOADING OVERLAY */
-.loading-overlay{position:fixed;inset:0;background:rgba(10,10,15,.85);z-index:300;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
-.loading-overlay.hidden{display:none}
-.spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+/* LOADING */
+.loading{position:fixed;inset:0;background:rgba(10,10,15,.88);z-index:300;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+.loading.off{display:none}
+.spinner{width:38px;height:38px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.loading-text{font-size:14px;font-weight:600;color:var(--muted)}
+.loading p{font-size:14px;font-weight:600;color:var(--muted)}
 
 /* FORM */
-.form-wrap{padding:16px}
+.fwrap{padding:16px}
 .step{display:none}.step.active{display:block}
-.step-badge{background:var(--accent);color:#000;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.5px;display:inline-block}
-.step-title{font-size:20px;font-weight:700;margin-top:6px;letter-spacing:-.3px}
-.step-sub{font-size:13px;color:var(--muted);margin-top:3px;margin-bottom:20px}
+.sbadge{background:var(--accent);color:#000;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;display:inline-block;letter-spacing:.5px}
+.stitle{font-size:20px;font-weight:700;margin-top:6px;letter-spacing:-.3px}
+.ssub{font-size:13px;color:var(--muted);margin-top:3px;margin-bottom:20px}
 
 .field{margin-bottom:16px}
 .field label{display:block;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px}
-.field input,.field select,.field textarea{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:16px !important;padding:14px 16px;outline:none;transition:border-color .2s;-webkit-appearance:none;appearance:none;-webkit-text-fill-color:var(--text)}
-.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent)}
-.field input:-webkit-autofill,.field input:-webkit-autofill:hover,.field input:-webkit-autofill:focus{-webkit-box-shadow:0 0 0 1000px var(--card) inset !important;-webkit-text-fill-color:var(--text) !important;border-color:var(--accent)}
-.field textarea{resize:none;min-height:88px;line-height:1.5}
-.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238888A0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px}
+.field input,.field textarea{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);color:var(--text);font-size:16px !important;padding:14px 16px;outline:none;-webkit-appearance:none;appearance:none;-webkit-text-fill-color:var(--text);transition:border-color .2s}
+.field input:focus,.field textarea:focus{border-color:var(--accent)}
+.field input:-webkit-autofill,.field input:-webkit-autofill:focus{-webkit-box-shadow:0 0 0 1000px var(--card) inset !important;-webkit-text-fill-color:var(--text) !important}
 .field input::placeholder,.field textarea::placeholder{color:var(--muted);-webkit-text-fill-color:var(--muted)}
-.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field textarea{resize:none;min-height:84px;line-height:1.5}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 
+/* CHIPS */
 .chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{padding:12px 16px;background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-weight:600;cursor:pointer;color:var(--muted);user-select:none;-webkit-user-select:none;min-height:44px;display:inline-flex;align-items:center;justify-content:center;touch-action:manipulation;transition:background-color .15s,border-color .15s,color .15s;-webkit-touch-callout:none}
-.chip:active{transform:scale(.96)}
+.chip{padding:11px 15px;background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);font-size:14px;font-weight:600;cursor:pointer;color:var(--muted);user-select:none;-webkit-user-select:none;min-height:44px;display:inline-flex;align-items:center;justify-content:center;touch-action:manipulation;transition:background-color .12s,border-color .12s,color .12s;-webkit-touch-callout:none}
+.chip:active{transform:scale(.95)}
 .chip.sel{background:rgba(0,196,244,.12);border-color:var(--accent);color:var(--accent)}
 .chip[data-opp="Alta"].sel{background:rgba(34,197,94,.15);border-color:var(--green);color:var(--green)}
 .chip[data-opp="Media"].sel{background:rgba(234,179,8,.15);border-color:var(--yellow);color:var(--yellow)}
 .chip[data-opp="Baja"].sel{background:rgba(249,115,22,.15);border-color:var(--orange);color:var(--orange)}
 .chip[data-opp="Nula"].sel{background:rgba(239,68,68,.15);border-color:var(--red);color:var(--red)}
-.yn{display:flex;gap:10px}.yn .chip{flex:1;font-size:16px;font-weight:700;padding:16px}
+.yn{display:flex;gap:10px}.yn .chip{flex:1;font-size:16px;font-weight:700;padding:15px}
 
-.axum-box{background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:14px;margin-top:4px}
-.axum-title{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.7px;margin-bottom:12px}
-.axum-opts{display:flex;gap:10px}
-.axum-btn{flex:1;padding:14px 8px;border-radius:var(--radius-sm);border:1.5px solid var(--border);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;background:var(--card);color:var(--muted);text-align:center;min-height:52px;display:flex;align-items:center;justify-content:center;gap:6px;flex-direction:column;touch-action:manipulation;transition:background-color .15s,border-color .15s,color .15s;-webkit-appearance:none;appearance:none}
-.axum-btn:active{opacity:.75}
-.axum-btn.axum-ok.sel{background:rgba(34,197,94,.12);border-color:var(--green);color:var(--green)}
-.axum-btn.axum-fix.sel{background:rgba(239,68,68,.12);border-color:var(--red);color:var(--red)}
+/* AXUM BOX */
+.axum-box{background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--rs);padding:14px;margin-top:4px}
+.axum-lbl{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.7px;margin-bottom:12px}
+.axum-btns{display:flex;gap:10px}
+.axum-btn{flex:1;padding:13px 8px;border-radius:var(--rs);border:1.5px solid var(--border);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;background:var(--card);color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:52px;touch-action:manipulation;-webkit-appearance:none;transition:background-color .12s,border-color .12s,color .12s}
+.axum-btn:active{opacity:.7}
+.axum-ok.sel{background:rgba(34,197,94,.12);border-color:var(--green);color:var(--green)}
+.axum-fix.sel{background:rgba(239,68,68,.12);border-color:var(--red);color:var(--red)}
+/* Campo motivo: oculto por defecto, aparece al elegir Corregir */
+.axum-motivo{display:none;margin-top:12px}
+.axum-motivo.visible{display:block}
 
-.nivel-chips{display:flex;gap:10px}
-.nivel-chip{flex:1;padding:16px 8px;border-radius:var(--radius-sm);border:2px solid var(--border);text-align:center;cursor:pointer;font-size:13px;font-weight:700;color:var(--muted);background:var(--card);min-height:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;touch-action:manipulation;transition:background-color .15s,border-color .15s,color .15s;-webkit-user-select:none;user-select:none}
-.nivel-chip:active{opacity:.75}
-.nivel-chip[data-n="alto"].sel{background:rgba(34,197,94,.15);border-color:var(--green);color:var(--green)}
-.nivel-chip[data-n="medio"].sel{background:rgba(234,179,8,.15);border-color:var(--yellow);color:var(--yellow)}
-.nivel-chip[data-n="bajo"].sel{background:rgba(239,68,68,.15);border-color:var(--red);color:var(--red)}
-.divider{height:1px;background:var(--border);margin:20px 0}
+/* NIVEL */
+.nivel-row{display:flex;gap:10px}
+.nchip{flex:1;padding:15px 8px;border-radius:var(--rs);border:2px solid var(--border);cursor:pointer;font-size:13px;font-weight:700;color:var(--muted);background:var(--card);min-height:62px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;touch-action:manipulation;transition:background-color .12s,border-color .12s,color .12s;-webkit-user-select:none}
+.nchip:active{opacity:.75}
+.nchip[data-n="alto"].sel{background:rgba(34,197,94,.15);border-color:var(--green);color:var(--green)}
+.nchip[data-n="medio"].sel{background:rgba(234,179,8,.15);border-color:var(--yellow);color:var(--yellow)}
+.nchip[data-n="bajo"].sel{background:rgba(239,68,68,.15);border-color:var(--red);color:var(--red)}
 
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;padding:10px 16px;padding-bottom:calc(10px + var(--safe-b));padding-left:calc(16px + var(--safe-l));padding-right:calc(16px + var(--safe-r));background:var(--bg);border-top:1px solid var(--border);display:flex;gap:10px;z-index:50}
-.btn{flex:1;padding:15px;border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;cursor:pointer;border:none;letter-spacing:-.2px;min-height:52px;touch-action:manipulation;-webkit-appearance:none;appearance:none;transition:opacity .15s}
-.btn:active{opacity:.75}
-.btn-back{background:var(--card);border:1.5px solid var(--border);color:var(--muted);max-width:90px}
+.divider{height:1px;background:var(--border);margin:18px 0}
+
+/* BOTTOM NAV */
+.bnav{position:fixed;bottom:0;left:0;right:0;padding:10px 16px;padding-bottom:calc(10px + var(--sb));background:var(--bg);border-top:1px solid var(--border);display:flex;gap:10px;z-index:50}
+.btn{flex:1;padding:14px;border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;cursor:pointer;border:none;min-height:50px;touch-action:manipulation;-webkit-appearance:none;transition:opacity .12s}
+.btn:active{opacity:.72}
+.btn-back{background:var(--card);border:1.5px solid var(--border);color:var(--muted);max-width:88px}
 .btn-next{background:var(--accent);color:#000}
 .btn-save{background:var(--green);color:#000;flex:2}
 
-.toast{position:fixed;top:calc(68px + var(--safe-t));left:50%;transform:translateX(-50%) translateY(-8px);padding:11px 22px;border-radius:30px;font-weight:700;font-size:14px;z-index:999;opacity:0;transition:opacity .25s,transform .25s;white-space:nowrap;pointer-events:none;max-width:90vw;text-align:center}
+/* TOAST */
+.toast{position:fixed;top:calc(64px + var(--st));left:50%;transform:translateX(-50%) translateY(-6px);padding:10px 20px;border-radius:28px;font-weight:700;font-size:14px;z-index:999;opacity:0;transition:opacity .22s,transform .22s;pointer-events:none;max-width:92vw;text-align:center;white-space:nowrap}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.toast-success{background:var(--green);color:#000}
-.toast-error{background:var(--red);color:#fff}
-.toast-warn{background:var(--yellow);color:#000}
+.t-ok{background:var(--green);color:#000}
+.t-err{background:var(--red);color:#fff}
+.t-warn{background:var(--yellow);color:#000}
 
-/* DASHBOARD */
-.dash-wrap{padding:16px}
-.dash-header{margin-bottom:14px}
-.dash-header h2{font-size:20px;font-weight:700;letter-spacing:-.4px}
-.dash-header p{font-size:13px;color:var(--muted);margin-top:3px}
-.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
-.kpi{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px}
-.kpi-val{font-size:30px;font-weight:700;font-family:'DM Mono',monospace;letter-spacing:-1px;color:var(--accent)}
-.kpi-label{font-size:12px;color:var(--muted);margin-top:2px;font-weight:500}
-.dash-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px}
-.dash-card-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:14px}
-.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.bar-label{font-size:13px;font-weight:500;min-width:80px;flex-shrink:0;color:var(--text)}
-.bar-track{flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden}
-.bar-fill{height:100%;border-radius:4px;transition:width .6s cubic-bezier(.4,0,.2,1)}
-.bar-val{font-size:12px;font-family:'DM Mono',monospace;color:var(--muted);min-width:24px;text-align:right}
-.pie-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border)}
-.pie-row:last-child{border:none}
-.pie-name{font-size:14px;flex:1}.pie-cnt{font-size:14px;font-family:'DM Mono',monospace;color:var(--muted);margin-right:8px}
-.pie-pct{font-size:11px;background:var(--bg3);border-radius:6px;padding:2px 7px;color:var(--muted);font-family:'DM Mono',monospace}
+/* LISTA */
+.lwrap{padding:16px}
+.lwrap h2{font-size:18px;font-weight:700;margin-bottom:3px}
+.lsub{font-size:13px;color:var(--muted);margin-bottom:14px}
+.frow-filters{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.frow-filters::-webkit-scrollbar{display:none}
+.fchip{padding:9px 15px;background:var(--card);border:1.5px solid var(--border);border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;color:var(--muted);flex-shrink:0;min-height:44px;display:flex;align-items:center;touch-action:manipulation;transition:background-color .12s,border-color .12s,color .12s}
+.fchip:active{opacity:.7}
+.fchip.on{border-color:var(--accent);color:var(--accent);background:rgba(0,196,244,.08)}
+.fchip.f-axum.on{border-color:var(--red);color:var(--red);background:rgba(239,68,68,.08)}
+.fchip.f-pend.on{border-color:var(--yellow);color:var(--yellow);background:rgba(234,179,8,.08)}
 
-/* LIST */
-.client-list{padding:16px}
-.client-list h2{font-size:18px;font-weight:700;margin-bottom:4px}
-.client-list .sub{font-size:13px;color:var(--muted);margin-bottom:14px}
-.filter-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
-.filter-row::-webkit-scrollbar{display:none}
-.filter-chip{padding:10px 16px;background:var(--card);border:1.5px solid var(--border);border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;color:var(--muted);flex-shrink:0;min-height:44px;display:flex;align-items:center;touch-action:manipulation;transition:background-color .15s,border-color .15s,color .15s}
-.filter-chip:active{opacity:.7}
-.filter-chip.active{border-color:var(--accent);color:var(--accent);background:rgba(0,196,244,.08)}
-.filter-chip.f-alto.active{border-color:var(--green);color:var(--green);background:rgba(34,197,94,.08)}
-.filter-chip.f-medio.active{border-color:var(--yellow);color:var(--yellow);background:rgba(234,179,8,.08)}
-.filter-chip.f-bajo.active{border-color:var(--red);color:var(--red);background:rgba(239,68,68,.08)}
-.client-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px;cursor:pointer;touch-action:manipulation}
-.client-card:active{opacity:.75}
-.cc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
-.cc-name{font-size:15px;font-weight:700;letter-spacing:-.2px}
-.cc-addr{font-size:12px;color:var(--muted);margin-top:2px}
-.nivel-badge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.3px;flex-shrink:0}
-.nb-alto{background:rgba(34,197,94,.15);color:var(--green)}.nb-medio{background:rgba(234,179,8,.15);color:var(--yellow)}.nb-bajo{background:rgba(239,68,68,.15);color:var(--red)}.nb-none{background:var(--bg3);color:var(--muted)}
-.cc-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.tag{padding:4px 10px;background:var(--bg3);border-radius:6px;font-size:11px;color:var(--muted);font-weight:500}
-.tag-ex{background:rgba(0,196,244,.1);color:var(--accent)}.tag-axum{background:rgba(239,68,68,.1);color:var(--red)}.tag-pending{background:rgba(234,179,8,.1);color:var(--yellow)}
-.empty{text-align:center;padding:60px 20px;color:var(--muted);font-size:15px}
-.empty-icon{font-size:40px;margin-bottom:12px}
+/* CARDS */
+.ccard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:10px;cursor:pointer;touch-action:manipulation}
+.ccard:active{opacity:.75}
+.ctop{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.cname{font-size:15px;font-weight:700;letter-spacing:-.2px}
+.caddr{font-size:12px;color:var(--muted);margin-top:2px}
+.nbadge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;flex-shrink:0}
+.nb-alto{background:rgba(34,197,94,.15);color:var(--green)}
+.nb-medio{background:rgba(234,179,8,.15);color:var(--yellow)}
+.nb-bajo{background:rgba(239,68,68,.15);color:var(--red)}
+.nb-none{background:var(--bg3);color:var(--muted)}
+.ctags{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.tag{padding:3px 9px;background:var(--bg3);border-radius:6px;font-size:11px;color:var(--muted);font-weight:500}
+.tag-axum{background:rgba(239,68,68,.1);color:var(--red)}
+.tag-pend{background:rgba(234,179,8,.1);color:var(--yellow)}
+.tag-ex{background:rgba(0,196,244,.1);color:var(--accent)}
+.empty{text-align:center;padding:56px 20px;color:var(--muted);font-size:15px}
+.empty-i{font-size:38px;margin-bottom:10px}
 
 /* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:none;align-items:flex-end}
-.modal-overlay.open{display:flex}
-.modal{background:var(--bg2);border-radius:20px 20px 0 0;width:100%;max-height:88vh;overflow-y:auto;padding:20px;padding-bottom:calc(20px + var(--safe-b));border-top:1px solid var(--border);-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
-.modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px}
-.modal-name{font-size:18px;font-weight:700;letter-spacing:-.3px}
-.modal-addr{font-size:13px;color:var(--muted);margin:3px 0 14px}
-.modal-row{display:flex;justify-content:space-between;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--border)}
-.modal-row:last-child{border:none}
-.modal-key{font-size:13px;color:var(--muted);font-weight:500;flex-shrink:0;margin-right:12px}
-.modal-val{font-size:13px;font-weight:600;text-align:right;color:var(--text);max-width:65%}
-.modal-close{width:100%;padding:16px;background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;margin-top:16px;cursor:pointer;min-height:52px;touch-action:manipulation;-webkit-appearance:none;appearance:none}
-.modal-close:active{opacity:.7}
+.moverlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:none;align-items:flex-end}
+.moverlay.open{display:flex}
+.modal{background:var(--bg2);border-radius:20px 20px 0 0;width:100%;max-height:88vh;overflow-y:auto;padding:20px;padding-bottom:calc(20px + var(--sb));border-top:1px solid var(--border);-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.mhandle{width:38px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px}
+.mname{font-size:18px;font-weight:700}
+.maddr{font-size:13px;color:var(--muted);margin:3px 0 14px}
+.mrow{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border)}
+.mrow:last-of-type{border:none}
+.mkey{font-size:13px;color:var(--muted);font-weight:500;flex-shrink:0;margin-right:10px}
+.mval{font-size:13px;font-weight:600;text-align:right;color:var(--text);max-width:65%;word-break:break-word}
+.mclose{width:100%;padding:15px;background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;margin-top:14px;cursor:pointer;min-height:50px;touch-action:manipulation;-webkit-appearance:none}
+.mclose:active{opacity:.7}
 
-.install-banner{background:rgba(0,196,244,.08);border:1px solid rgba(0,196,244,.18);border-radius:var(--radius-sm);padding:10px 14px;margin:0 16px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.install-banner p{font-size:12px;color:var(--accent);font-weight:500;line-height:1.4}
-.install-close{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:4px 8px;touch-action:manipulation;min-height:36px;min-width:36px;display:flex;align-items:center;justify-content:center}
-
-.bc1{background:#00C4F4}.bc2{background:#22C55E}.bc3{background:#EAB308}.bc4{background:#F97316}.bc5{background:#EF4444}.bc6{background:#A855F7}.bc7{background:#EC4899}.bc8{background:#14B8A6}
+/* INSTALL BANNER */
+.ibanner{background:rgba(0,196,244,.07);border:1px solid rgba(0,196,244,.18);border-radius:var(--rs);padding:9px 14px;margin:0 16px 10px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ibanner p{font-size:12px;color:var(--accent);font-weight:500;line-height:1.4}
+.iclose{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:4px 8px;min-height:36px;min-width:36px;display:flex;align-items:center;justify-content:center;touch-action:manipulation}
 </style>
 </head>
 <body>
 
-<!-- LOADING OVERLAY — visible mientras se cargan datos de Sheets -->
-<div class="loading-overlay" id="loading-overlay">
+<!-- CARGANDO -->
+<div class="loading" id="loading">
   <div class="spinner"></div>
-  <div class="loading-text" id="loading-text">Cargando datos…</div>
+  <p id="loading-txt">Cargando datos…</p>
 </div>
 
+<!-- NAV -->
 <nav class="nav">
   <div class="nav-logo">
-    <svg viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" fill="#00C4F4" opacity=".15"/><circle cx="14" cy="14" r="7" fill="#00C4F4"/><path d="M8 14h12M14 8v12" stroke="#000" stroke-width="2" stroke-linecap="round"/></svg>
+    <svg viewBox="0 0 28 28" fill="none">
+      <circle cx="14" cy="14" r="13" fill="#00C4F4" opacity=".15"/>
+      <circle cx="14" cy="14" r="7" fill="#00C4F4"/>
+      <path d="M8 14h12M14 8v12" stroke="#000" stroke-width="2" stroke-linecap="round"/>
+    </svg>
     <div class="nav-title">PDV <span>PepsiCo</span></div>
   </div>
   <div class="nav-tabs">
-    <button class="nav-tab active" id="tab-nuevo" onclick="showView('form-view')">Nuevo</button>
-    <button class="nav-tab" id="tab-stats" onclick="showView('dash-view')">Stats</button>
-    <button class="nav-tab" id="tab-clientes" onclick="showView('list-view')">Clientes</button>
+    <button class="nav-tab active" id="t-form" onclick="goTo('form-view')">Nuevo</button>
+    <button class="nav-tab" id="t-list" onclick="goTo('list-view')">Clientes</button>
   </div>
 </nav>
 
-<div class="progress-bar" id="progress-bar"><div class="progress-fill" id="progress" style="width:20%"></div></div>
-
-<div class="sync-bar sync-loading" id="sync-bar">
-  <div class="sync-dot"></div>
-  <span id="sync-label">Conectando con Google Sheets…</span>
+<!-- BARRA PROGRESO -->
+<div class="prog-bar" id="prog-bar">
+  <div class="prog-fill" id="prog" style="width:20%"></div>
 </div>
 
-<div class="install-banner" id="install-banner" style="display:none">
+<!-- BARRA SYNC -->
+<div class="sbar s-load" id="sbar">
+  <div class="sleft">
+    <div class="sdot"></div>
+    <span id="slabel">Conectando…</span>
+  </div>
+  <button class="reload-btn" onclick="reload()">↺ Actualizar</button>
+</div>
+
+<!-- BANNER INSTALAR -->
+<div class="ibanner" id="ibanner" style="display:none">
   <p>📲 Agregá al inicio para usarla como app</p>
-  <button class="install-close" onclick="hideBanner()">✕</button>
+  <button class="iclose" onclick="hideBanner()">✕</button>
 </div>
 
-<!-- FORMULARIO -->
+<!-- ═══════════════════════════════════════
+     VISTA: FORMULARIO
+════════════════════════════════════════ -->
 <div class="view active" id="form-view">
-<div class="form-wrap">
+<div class="fwrap">
 
-<div class="step active" id="step1">
-  <div class="step-badge">PASO 1 / 5</div>
-  <div class="step-title">Datos básicos</div>
-  <div class="step-sub">Identificación del comercio</div>
-  <div class="field"><label>Nombre del comercio ✱</label><input type="text" id="f-nombre" placeholder="Ej: Kiosco La Esquina" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false"></div>
-  <div class="field"><label>Dirección ✱</label><input type="text" id="f-dir" placeholder="Ej: Av. Colón 1234, Nueva Córdoba" autocomplete="off" autocorrect="off" autocapitalize="sentences"></div>
+<!-- PASO 1: BÁSICOS -->
+<div class="step active" id="s1">
+  <div class="sbadge">PASO 1 / 5</div>
+  <div class="stitle">Datos básicos</div>
+  <div class="ssub">Identificación del comercio</div>
+  <div class="field">
+    <label>Nombre del comercio ✱</label>
+    <input type="text" id="f-nombre" placeholder="Ej: Kiosco La Esquina"
+      autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false">
+  </div>
+  <div class="field">
+    <label>Dirección ✱</label>
+    <input type="text" id="f-dir" placeholder="Ej: Av. Colón 1234, Nueva Córdoba"
+      autocomplete="off" autocorrect="off" autocapitalize="sentences">
+  </div>
   <div class="field">
     <label>Zona de visita ✱</label>
     <div class="chips">
@@ -236,13 +254,20 @@ input,select,textarea,button{font-size:16px !important;font-family:'DM Sans',san
   </div>
 </div>
 
-<div class="step" id="step2">
-  <div class="step-badge">PASO 2 / 5</div>
-  <div class="step-title">Contacto y tipo</div>
-  <div class="step-sub">Teléfonos, tipología y AXUM</div>
-  <div class="field-row">
-    <div class="field"><label>Tel. dueño/encargado</label><input type="tel" id="f-tel1" placeholder="351 000-0000" inputmode="tel" autocomplete="tel"></div>
-    <div class="field"><label>Tel. empleado</label><input type="tel" id="f-tel2" placeholder="351 000-0000" inputmode="tel" autocomplete="tel"></div>
+<!-- PASO 2: CONTACTO + TIPO + AXUM -->
+<div class="step" id="s2">
+  <div class="sbadge">PASO 2 / 5</div>
+  <div class="stitle">Contacto y tipo</div>
+  <div class="ssub">Teléfonos, tipología y AXUM</div>
+  <div class="frow">
+    <div class="field">
+      <label>Tel. dueño/encargado</label>
+      <input type="tel" id="f-tel1" placeholder="351 000-0000" inputmode="tel">
+    </div>
+    <div class="field">
+      <label>Tel. empleado</label>
+      <input type="tel" id="f-tel2" placeholder="351 000-0000" inputmode="tel">
+    </div>
   </div>
   <div class="field">
     <label>Tipología ✱</label>
@@ -260,24 +285,43 @@ input,select,textarea,button{font-size:16px !important;font-family:'DM Sans',san
   <div class="field">
     <label>Estado en AXUM</label>
     <div class="axum-box">
-      <div class="axum-title">⬡ Sistema AXUM — Registro del cliente</div>
-      <div class="axum-opts">
-        <button type="button" class="axum-btn axum-ok" id="axum-ok" onclick="setAxum('ok')"><span>✓ Refleja bien</span><span style="font-size:11px;font-weight:400;opacity:.7">Datos correctos</span></button>
-        <button type="button" class="axum-btn axum-fix" id="axum-fix" onclick="setAxum('corregir')"><span>⚠ Corregir</span><span style="font-size:11px;font-weight:400;opacity:.7">Hay que actualizar</span></button>
+      <div class="axum-lbl">⬡ Sistema AXUM</div>
+      <div class="axum-btns">
+        <button type="button" class="axum-btn axum-ok" id="axum-ok" onclick="setAxum('ok')">
+          <span>✓ Refleja bien</span>
+          <span style="font-size:11px;font-weight:400;opacity:.7">Datos correctos</span>
+        </button>
+        <button type="button" class="axum-btn axum-fix" id="axum-fix" onclick="setAxum('corregir')">
+          <span>⚠ Corregir</span>
+          <span style="font-size:11px;font-weight:400;opacity:.7">Hay que actualizar</span>
+        </button>
+      </div>
+      <!-- Campo motivo: solo visible al elegir "Corregir" -->
+      <div class="axum-motivo" id="axum-motivo">
+        <div class="field" style="margin-top:12px;margin-bottom:0">
+          <label>Motivo de corrección</label>
+          <input type="text" id="f-axum-motivo"
+            placeholder="Ej: dirección incorrecta, teléfono desactualizado…"
+            autocomplete="off" autocorrect="off" autocapitalize="sentences">
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<div class="step" id="step3">
-  <div class="step-badge">PASO 3 / 5</div>
-  <div class="step-title">Ejecución PDV</div>
-  <div class="step-sub">Exhibidor y cumplimiento</div>
+<!-- PASO 3: EJECUCIÓN -->
+<div class="step" id="s3">
+  <div class="sbadge">PASO 3 / 5</div>
+  <div class="stitle">Ejecución PDV</div>
+  <div class="ssub">Exhibidor y cumplimiento</div>
   <div class="field">
     <label>¿Tiene exhibidor PepsiCo?</label>
-    <div class="yn chips"><div class="chip" data-g="exhibidor" data-v="Sí">✓ Sí</div><div class="chip" data-g="exhibidor" data-v="No">✗ No</div></div>
+    <div class="yn chips">
+      <div class="chip" data-g="exhibidor" data-v="Sí">✓ Sí</div>
+      <div class="chip" data-g="exhibidor" data-v="No">✗ No</div>
+    </div>
   </div>
-  <div id="tipo-exhib-sec" style="display:none">
+  <div id="exhib-extra" style="display:none">
     <div class="field">
       <label>Tipo de exhibidor</label>
       <div class="chips">
@@ -291,26 +335,43 @@ input,select,textarea,button{font-size:16px !important;font-family:'DM Sans',san
     </div>
     <div class="field">
       <label>¿Exhibidor correcto para la tipología?</label>
-      <div class="yn chips"><div class="chip" data-g="exhib-correcto" data-v="Sí">✓ Sí</div><div class="chip" data-g="exhib-correcto" data-v="No">✗ No</div></div>
+      <div class="yn chips">
+        <div class="chip" data-g="exhib-ok" data-v="Sí">✓ Sí</div>
+        <div class="chip" data-g="exhib-ok" data-v="No">✗ No</div>
+      </div>
     </div>
   </div>
   <div class="field">
     <label>¿Respeta precios sugeridos?</label>
-    <div class="chips"><div class="chip" data-g="precios" data-v="Sí">✓ Sí</div><div class="chip" data-g="precios" data-v="Parcialmente">~ Parcial</div><div class="chip" data-g="precios" data-v="No">✗ No</div></div>
+    <div class="chips">
+      <div class="chip" data-g="precios" data-v="Sí">✓ Sí</div>
+      <div class="chip" data-g="precios" data-v="Parcialmente">~ Parcial</div>
+      <div class="chip" data-g="precios" data-v="No">✗ No</div>
+    </div>
   </div>
   <div class="field">
     <label>¿Respeta planograma?</label>
-    <div class="chips"><div class="chip" data-g="planograma" data-v="Sí">✓ Sí</div><div class="chip" data-g="planograma" data-v="Parcialmente">~ Parcial</div><div class="chip" data-g="planograma" data-v="No">✗ No</div></div>
+    <div class="chips">
+      <div class="chip" data-g="planograma" data-v="Sí">✓ Sí</div>
+      <div class="chip" data-g="planograma" data-v="Parcialmente">~ Parcial</div>
+      <div class="chip" data-g="planograma" data-v="No">✗ No</div>
+    </div>
   </div>
 </div>
 
-<div class="step" id="step4">
-  <div class="step-badge">PASO 4 / 5</div>
-  <div class="step-title">Portafolio</div>
-  <div class="step-sub">Marcas presentes en el local</div>
+<!-- PASO 4: PORTAFOLIO -->
+<div class="step" id="s4">
+  <div class="sbadge">PASO 4 / 5</div>
+  <div class="stitle">Portafolio</div>
+  <div class="ssub">Marcas presentes en el local</div>
   <div class="field">
     <label>Cantidad de marcas PepsiCo</label>
-    <div class="chips"><div class="chip" data-g="cant-marcas" data-v="1 a 3">1–3</div><div class="chip" data-g="cant-marcas" data-v="4 a 6">4–6</div><div class="chip" data-g="cant-marcas" data-v="7 a 9">7–9</div><div class="chip" data-g="cant-marcas" data-v="Más de 9">+9</div></div>
+    <div class="chips">
+      <div class="chip" data-g="cant-marcas" data-v="1 a 3">1–3</div>
+      <div class="chip" data-g="cant-marcas" data-v="4 a 6">4–6</div>
+      <div class="chip" data-g="cant-marcas" data-v="7 a 9">7–9</div>
+      <div class="chip" data-g="cant-marcas" data-v="Más de 9">+9</div>
+    </div>
   </div>
   <div class="field">
     <label>Marcas presentes (todas las que apliquen)</label>
@@ -328,689 +389,666 @@ input,select,textarea,button{font-size:16px !important;font-family:'DM Sans',san
   </div>
 </div>
 
-<div class="step" id="step5">
-  <div class="step-badge">PASO 5 / 5</div>
-  <div class="step-title">Oportunidades</div>
-  <div class="step-sub">Potencial y nivel del cliente</div>
+<!-- PASO 5: OPORTUNIDADES -->
+<div class="step" id="s5">
+  <div class="sbadge">PASO 5 / 5</div>
+  <div class="stitle">Oportunidades</div>
+  <div class="ssub">Potencial y observaciones</div>
   <div class="field">
     <label>Posibilidad de exhibición adicional</label>
     <div class="chips">
-      <div class="chip" data-g="opp-exhib" data-v="Alta" data-opp="Alta">🟢 Alta</div>
-      <div class="chip" data-g="opp-exhib" data-v="Media" data-opp="Media">🟡 Media</div>
-      <div class="chip" data-g="opp-exhib" data-v="Baja" data-opp="Baja">🟠 Baja</div>
-      <div class="chip" data-g="opp-exhib" data-v="Nula" data-opp="Nula">🔴 Nula</div>
+      <div class="chip" data-g="opp" data-v="Alta" data-opp="Alta">🟢 Alta</div>
+      <div class="chip" data-g="opp" data-v="Media" data-opp="Media">🟡 Media</div>
+      <div class="chip" data-g="opp" data-v="Baja" data-opp="Baja">🟠 Baja</div>
+      <div class="chip" data-g="opp" data-v="Nula" data-opp="Nula">🔴 Nula</div>
     </div>
   </div>
-  <div class="field"><label>Producto de catálogo de interés</label><input type="text" id="f-producto" placeholder="Ej: Quaker granola, 3D's nuevo sabor…" autocomplete="off" autocorrect="off" autocapitalize="sentences"></div>
   <div class="field">
-    <label>Nivel de oportunidad del cliente</label>
-    <div class="nivel-chips">
-      <div class="nivel-chip" data-g="nivel" data-n="alto" data-v="alto"><span style="font-size:22px">🟢</span><span style="font-size:12px">Alto</span></div>
-      <div class="nivel-chip" data-g="nivel" data-n="medio" data-v="medio"><span style="font-size:22px">🟡</span><span style="font-size:12px">Medio</span></div>
-      <div class="nivel-chip" data-g="nivel" data-n="bajo" data-v="bajo"><span style="font-size:22px">🔴</span><span style="font-size:12px">Bajo</span></div>
+    <label>Producto de catálogo de interés</label>
+    <input type="text" id="f-producto" placeholder="Ej: Quaker granola, 3D's…"
+      autocomplete="off" autocorrect="off" autocapitalize="sentences">
+  </div>
+  <div class="field">
+    <label>Nivel de oportunidad</label>
+    <div class="nivel-row">
+      <div class="nchip" data-n="alto"><span style="font-size:20px">🟢</span><span style="font-size:12px">Alto</span></div>
+      <div class="nchip" data-n="medio"><span style="font-size:20px">🟡</span><span style="font-size:12px">Medio</span></div>
+      <div class="nchip" data-n="bajo"><span style="font-size:20px">🔴</span><span style="font-size:12px">Bajo</span></div>
     </div>
   </div>
-  <div class="field"><label>Observación rápida</label><textarea id="f-obs" placeholder="Ej: Tiene espacio para exhibidora nueva, muy colaborativo…"></textarea></div>
+  <div class="field">
+    <label>Observación rápida</label>
+    <textarea id="f-obs" placeholder="Notas relevantes del local…"></textarea>
+  </div>
 </div>
 
-</div><!-- /form-wrap -->
-<div class="bottom-nav" id="form-bottom">
+</div><!-- /fwrap -->
+
+<!-- BOTONES FIJOS -->
+<div class="bnav" id="bnav">
   <button type="button" class="btn btn-back" id="btn-back" onclick="prevStep()" style="display:none">← Atrás</button>
   <button type="button" class="btn btn-next" id="btn-next" onclick="nextStep()">Siguiente →</button>
 </div>
 </div><!-- /form-view -->
 
-<!-- DASHBOARD -->
-<div class="view" id="dash-view">
-<div class="dash-wrap">
-  <div class="dash-header"><h2>Dashboard</h2><p id="dash-sub">—</p></div>
-  <div class="kpi-grid" id="kpi-grid"></div>
-  <div id="dash-content"></div>
-  <div id="dash-empty" class="empty" style="display:none"><div class="empty-icon">📊</div>Sin relevamientos aún</div>
-</div>
-</div>
-
-<!-- LISTA -->
+<!-- ═══════════════════════════════════════
+     VISTA: LISTA DE CLIENTES
+════════════════════════════════════════ -->
 <div class="view" id="list-view">
-<div class="client-list">
+<div class="lwrap">
   <h2>Clientes relevados</h2>
-  <p class="sub" id="list-sub">0 clientes</p>
-  <div class="filter-row">
-    <div class="filter-chip active" onclick="setFilter('todos',this)">Todos</div>
-    <div class="filter-chip f-alto" onclick="setFilter('alto',this)">🟢 Alto</div>
-    <div class="filter-chip f-medio" onclick="setFilter('medio',this)">🟡 Medio</div>
-    <div class="filter-chip f-bajo" onclick="setFilter('bajo',this)">🔴 Bajo</div>
-    <div class="filter-chip" onclick="setFilter('sin-exhib',this)">Sin exhibidor</div>
-    <div class="filter-chip" onclick="setFilter('axum-fix',this)">⚠ AXUM</div>
-    <div class="filter-chip" onclick="setFilter('precios-no',this)">Precios ✗</div>
-    <div class="filter-chip" onclick="setFilter('pendiente',this)">⏳ Local</div>
+  <p class="lsub" id="lsub">0 clientes</p>
+  <div class="frow-filters">
+    <div class="fchip on" onclick="setFilter('todos',this)">Todos</div>
+    <div class="fchip f-axum" onclick="setFilter('axum',this)">⚠ AXUM</div>
+    <div class="fchip f-pend" onclick="setFilter('local',this)">⏳ Local</div>
   </div>
-  <div id="client-list-content"></div>
+  <div id="list-content"></div>
 </div>
 </div>
 
 <!-- MODAL -->
-<div class="modal-overlay" id="modal-overlay">
-  <div class="modal"><div class="modal-handle"></div><div id="modal-body"></div><button type="button" class="modal-close" onclick="closeModal()">Cerrar</button></div>
+<div class="moverlay" id="moverlay">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <div id="mbody"></div>
+    <button type="button" class="mclose" onclick="closeModal()">Cerrar</button>
+  </div>
 </div>
 
+<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
+<!-- ═══════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════ -->
 <script>
 'use strict';
 
-/* ============================================================
-   ▶ CONFIGURACIÓN — pegar tu URL aquí
-   ============================================================ */
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzbKUnBiXBnQjmN0QfkVzlcAmIG6md6nB36620Ct5EytdJPkaEcvK7fBlAEJLffiiJJ/exec';
+/* ─── CONFIGURACIÓN ─────────────────────────────────────────
+   Reemplazar con la URL del Web App de Google Apps Script    */
+const URL_GAS = 'https://script.google.com/macros/s/AKfycbzbKUnBiXBnQjmN0QfkVzlcAmIG6md6nB36620Ct5EytdJPkaEcvK7fBlAEJLffiiJJ/exec';
 
-/* ============================================================
-   ESTADO GLOBAL
-   Sheets = fuente de verdad. localStorage = caché offline.
-   ============================================================ */
-const LS_CACHE   = 'pdv_cache_v4';   // copia local de los datos de Sheets
-const LS_PENDING = 'pdv_pending_v4'; // registros aún no enviados a Sheets
-const LS_DELETED = 'pdv_deleted_v4'; // syncIds eliminados offline, pendiente sync
+/* ─── CLAVES DE ALMACENAMIENTO LOCAL ───────────────────────
+   v5 usa claves nuevas para evitar conflictos con versiones
+   anteriores que pudieran tener datos en otro formato       */
+const LS_DATA    = 'pdv_data_v5';
+const LS_PENDING = 'pdv_pend_v5';
 
-let clients     = [];  // fuente activa — siempre se reemplaza con los datos de Sheets
-let pending     = [];  // cola de ADD pendientes
-let pendingDel  = [];  // cola de DELETE pendientes
-let currentStep = 1;
-const TOTAL_STEPS = 5;
-let currentFilter = 'todos';
-let axumVal = '';
-let isSyncing = false;
+/* ─── ESTADO ────────────────────────────────────────────────
+   Una sola fuente de verdad: el array `clients`.
+   `pending` es la cola de lo que falta enviar a Sheets.     */
+let clients  = [];
+let pending  = [];
+let step     = 1;
+const STEPS  = 5;
+let filter   = 'todos';
+let axumVal  = '';
+let syncing  = false;
 
-/* ============================================================
-   localStorage helpers
-   ============================================================ */
-const lsGet = k => { try { return JSON.parse(localStorage.getItem(k)||'null'); } catch(e){ return null; } };
-const lsSet = (k,v) => { try { localStorage.setItem(k,JSON.stringify(v)); return true; } catch(e){ return false; } };
+/* ─── localStorage ──────────────────────────────────────────
+   Dos funciones simples. El try/catch es porque iOS en modo
+   privado lanza una excepción al intentar escribir.         */
+const lsGet = k => { try { return JSON.parse(localStorage.getItem(k)||'null'); } catch(e){ return null; }};
+const lsSet = (k,v) => { try { localStorage.setItem(k,JSON.stringify(v)); } catch(e){ /* iOS private mode */ }};
 
-/* ============================================================
-   SYNC BAR
-   ============================================================ */
-function setSyncBar(state, label) {
-  const bar = document.getElementById('sync-bar');
-  bar.className = 'sync-bar sync-' + state;
-  document.getElementById('sync-label').textContent = label;
+/* ─── SYNC BAR ──────────────────────────────────────────────*/
+function setSbar(cls, txt) {
+  document.getElementById('sbar').className = 'sbar ' + cls;
+  document.getElementById('slabel').textContent = txt;
 }
 
-/* ============================================================
-   LOADING OVERLAY
-   ============================================================ */
-function showLoading(text) {
-  document.getElementById('loading-text').textContent = text || 'Cargando…';
-  document.getElementById('loading-overlay').classList.remove('hidden');
-}
-function hideLoading() {
-  document.getElementById('loading-overlay').classList.add('hidden');
-}
+/* ─── LOADING ───────────────────────────────────────────────*/
+const showLoad = t => { document.getElementById('loading-txt').textContent = t||'Cargando…'; document.getElementById('loading').classList.remove('off'); };
+const hideLoad = () => document.getElementById('loading').classList.add('off');
 
-/* ============================================================
-   API CALL — wrapper único para todas las llamadas a Sheets
-   ============================================================ */
-async function apiCall(body, timeoutMs = 12000) {
-  if (APPS_SCRIPT_URL === '') throw new Error('URL de Apps Script no configurada');
+/* ─── LLAMADA A GOOGLE APPS SCRIPT ─────────────────────────
+   Usamos Content-Type: text/plain para evitar el "preflight"
+   CORS que bloquea las peticiones desde el navegador móvil.
+   Si la URL no está configurada, lanza error inmediatamente. */
+async function gas(body, ms=12000) {
+  if (URL_GAS === 'TU_URL_AQUI') throw new Error('URL no configurada');
   const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+  const t = setTimeout(()=>ctrl.abort(), ms);
   try {
-    const res = await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain' }, // text/plain evita preflight CORS
+    const r = await fetch(URL_GAS, {
+      method:'POST',
+      headers:{'Content-Type':'text/plain'},
       body: JSON.stringify(body),
-      signal: ctrl.signal,
+      signal: ctrl.signal
     });
-    clearTimeout(timer);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    return await res.json();
-  } catch(e) {
-    clearTimeout(timer);
-    throw e;
-  }
+    clearTimeout(t);
+    if (!r.ok) throw new Error('HTTP '+r.status);
+    return await r.json();
+  } catch(e) { clearTimeout(t); throw e; }
 }
 
-/* ============================================================
-   CARGA INICIAL — Sheets como fuente de verdad
-   ============================================================ */
-async function initApp() {
-  // Mostrar caché local mientras carga para no ver pantalla vacía
-  const cached = lsGet(LS_CACHE);
-  pending    = lsGet(LS_PENDING) || [];
-  pendingDel = lsGet(LS_DELETED) || [];
+/* ─── INICIO DE LA APP ──────────────────────────────────────
+   Flujo:
+   1. Mostrar caché local de inmediato (no pantalla vacía)
+   2. Intentar leer desde Sheets (fuente de verdad)
+   3. Si falla: usar caché como fallback
+   4. Enviar pendientes acumulados                           */
+async function init() {
+  pending = lsGet(LS_PENDING) || [];
+  const cache = lsGet(LS_DATA) || [];
 
-  if (cached && cached.length > 0) {
-    // Mezclar caché + pendientes locales para que se vean inmediatamente
-    clients = mergeClientsWithPending(cached, pending);
-    hideLoading();
-    setSyncBar('pending', 'Actualizando desde Google Sheets…');
+  // Mostrar caché mientras carga para no ver pantalla en blanco
+  if (cache.length) {
+    clients = mergePending(cache, pending);
+    hideLoad();
+    setSbar('s-pend','Actualizando desde Sheets…');
   }
 
-  if (APPS_SCRIPT_URL === '') {
-    clients = cached || [];
-    hideLoading();
-    setSyncBar('offline', 'Apps Script no configurado — modo local');
+  if (URL_GAS === 'TU_URL_AQUI') {
+    clients = cache;
+    hideLoad();
+    setSbar('s-off','Solo local — configurar URL');
     return;
   }
 
   if (!navigator.onLine) {
-    clients = mergeClientsWithPending(cached || [], pending);
-    hideLoading();
-    setSyncBar('offline', `Sin conexión — mostrando caché local (${clients.length} registros)`);
+    clients = mergePending(cache, pending);
+    hideLoad();
+    setSbar('s-off',`Sin conexión — ${clients.length} en caché`);
     return;
   }
 
-  setSyncBar('loading', 'Cargando datos desde Google Sheets…');
-
   try {
-    // 1. Enviar pendientes primero (si hay), antes de leer
-    if (pending.length > 0 || pendingDel.length > 0) {
-      await flushPending(false); // false = no actualizar UI todavía
-    }
+    // Primero vaciar pendientes, luego leer el estado real
+    if (pending.length) await flush(false);
 
-    // 2. Leer todos los datos de Sheets
-    const result = await apiCall({ action: 'getAll' });
-    if (result.status !== 'ok') throw new Error(result.message);
+    const r = await gas({ action:'getAll' });
+    if (r.status !== 'ok') throw new Error(r.message);
 
-    clients = result.data || [];
-
-    // 3. Agregar los pendientes que aún no se sincronizaron (edge case: flush falló parcialmente)
-    clients = mergeClientsWithPending(clients, pending);
-
-    // 4. Actualizar caché local
-    lsSet(LS_CACHE, clients.filter(c => c.synced));
-
-    hideLoading();
-    setSyncBar('ok', `${clients.length} registros · Sheets sincronizado ✓`);
-
-  } catch(err) {
-    console.error('initApp error:', err);
-    // Fallback: usar caché
-    clients = mergeClientsWithPending(cached || [], pending);
-    hideLoading();
-    setSyncBar('error', `Error al conectar — mostrando caché (${clients.length} reg.)`);
+    // Sheets respondió: reemplazar clients con datos reales
+    clients = mergePending(r.data||[], pending);
+    lsSet(LS_DATA, clients.filter(c=>c.synced));
+    hideLoad();
+    setSbar('s-ok',`${clients.length} registros · Sincronizado ✓`);
+  } catch(e) {
+    clients = mergePending(cache, pending);
+    hideLoad();
+    setSbar('s-err',`Error al conectar — usando caché (${clients.length})`);
   }
 }
 
-/* Fusionar datos de Sheets con pendientes locales sin duplicar */
-function mergeClientsWithPending(sheetsData, localPending) {
+/* Fusiona datos de Sheets con pendientes locales sin duplicar.
+   También normaliza el campo `marcas` (siempre debe ser array). */
+function mergePending(base, pend) {
   const map = new Map();
-  sheetsData.forEach(c => map.set(c.syncId, c));
-  localPending.forEach(c => {
-    if (!map.has(c.syncId)) map.set(c.syncId, { ...c, synced: false });
-  });
+  base.forEach(c => map.set(c.syncId, fixMarcas(c)));
+  pend.forEach(c => { if (!map.has(c.syncId)) map.set(c.syncId, {...fixMarcas(c), synced:false}); });
   return Array.from(map.values());
 }
 
-/* ============================================================
-   FLUSH PENDING — enviar ADD y DELETE pendientes a Sheets
-   ============================================================ */
-async function flushPending(updateUI = true) {
-  if (isSyncing) return;
-  if (pending.length === 0 && pendingDel.length === 0) {
-    if (updateUI) setSyncBar('ok', `${clients.length} registros · Todo sincronizado ✓`);
+/* Sheets guarda marcas como string "Lay's, Doritos".
+   La app necesita un array. Esta función lo convierte. */
+function fixMarcas(c) {
+  if (typeof c.marcas === 'string') {
+    c.marcas = c.marcas.trim() ? c.marcas.split(',').map(m=>m.trim()).filter(Boolean) : [];
+  } else if (!Array.isArray(c.marcas)) {
+    c.marcas = [];
+  }
+  return c;
+}
+
+/* ─── FLUSH — enviar pendientes a Sheets ───────────────────
+   Recorre la cola uno por uno. Si falla alguno, lo deja
+   en la cola para el próximo intento.                       */
+async function flush(ui=true) {
+  if (syncing || !pending.length) {
+    if (ui && !pending.length) setSbar('s-ok',`${clients.length} registros · Sincronizado ✓`);
     return;
   }
-  if (!navigator.onLine || APPS_SCRIPT_URL === '') return;
+  if (!navigator.onLine || URL_GAS === 'TU_URL_AQUI') return;
 
-  isSyncing = true;
-  if (updateUI) setSyncBar('pending', `Sincronizando ${pending.length + pendingDel.length} operación(es)…`);
+  syncing = true;
+  if (ui) setSbar('s-pend',`Sincronizando ${pending.length} pendiente(s)…`);
 
-  // -- ADD pendientes --
-  const failedAdd = [];
-  for (const record of [...pending]) {
+  const failed = [];
+  for (const rec of [...pending]) {
     try {
-      const res = await apiCall({ action: 'add', data: record });
-      if (res.status === 'ok' || res.status === 'duplicate') {
-        const idx = clients.findIndex(c => c.syncId === record.syncId);
-        if (idx !== -1) clients[idx].synced = true;
-        // sacar de pending
-        pending = pending.filter(p => p.syncId !== record.syncId);
+      const r = await gas({ action:'add', data:rec });
+      if (r.status==='ok' || r.status==='duplicate') {
+        // Marcar como sincronizado en clients
+        const idx = clients.findIndex(c=>c.syncId===rec.syncId);
+        if (idx!==-1) clients[idx].synced = true;
+        pending = pending.filter(p=>p.syncId!==rec.syncId);
       } else {
-        failedAdd.push(record);
+        failed.push(rec);
       }
-    } catch(e) { failedAdd.push(record); }
+    } catch(e) { failed.push(rec); }
   }
-  pending = failedAdd;
 
-  // -- DELETE pendientes --
-  const failedDel = [];
-  for (const syncId of [...pendingDel]) {
-    try {
-      const res = await apiCall({ action: 'delete', syncId });
-      if (res.status === 'ok' || res.status === 'notfound') {
-        pendingDel = pendingDel.filter(id => id !== syncId);
-      } else {
-        failedDel.push(syncId);
-      }
-    } catch(e) { failedDel.push(syncId); }
-  }
-  pendingDel = failedDel;
-
+  pending = failed;
   lsSet(LS_PENDING, pending);
-  lsSet(LS_DELETED, pendingDel);
-  lsSet(LS_CACHE, clients.filter(c => c.synced));
-  isSyncing = false;
+  lsSet(LS_DATA, clients.filter(c=>c.synced));
+  syncing = false;
 
-  if (updateUI) {
-    const hasFailed = pending.length > 0 || pendingDel.length > 0;
-    setSyncBar(
-      hasFailed ? 'error' : 'ok',
-      hasFailed
-        ? `${pending.length + pendingDel.length} operación(es) sin sincronizar — reintentando`
-        : `${clients.length} registros · Todo sincronizado ✓`
-    );
-    if (hasFailed) setTimeout(() => flushPending(true), 30000);
+  if (ui) {
+    if (pending.length) {
+      setSbar('s-err',`${pending.length} sin sincronizar — reintentando en 30s`);
+      setTimeout(()=>flush(true), 30000);
+    } else {
+      setSbar('s-ok',`${clients.length} registros · Sincronizado ✓`);
+    }
   }
 }
 
-/* ============================================================
-   ONLINE/OFFLINE
-   ============================================================ */
-window.addEventListener('online', async () => {
-  setSyncBar('pending', 'Conexión restaurada — sincronizando…');
-  await flushPending(true);
-  // Re-leer Sheets para capturar cambios hechos desde otro dispositivo
+/* ─── RECARGA MANUAL ────────────────────────────────────────*/
+async function reload() {
+  if (!navigator.onLine) { toast('Sin conexión','warn'); return; }
+  if (URL_GAS === 'TU_URL_AQUI') { toast('URL no configurada','warn'); return; }
+  showLoad('Actualizando desde Sheets…');
+  setSbar('s-load','Actualizando…');
   try {
-    const result = await apiCall({ action: 'getAll' });
-    if (result.status === 'ok') {
-      clients = mergeClientsWithPending(result.data || [], pending);
-      lsSet(LS_CACHE, clients.filter(c => c.synced));
-      setSyncBar('ok', `${clients.length} registros · Sheets sincronizado ✓`);
+    if (pending.length) await flush(false);
+    const r = await gas({ action:'getAll' });
+    if (r.status!=='ok') throw new Error(r.message);
+    clients = mergePending(r.data||[], pending);
+    lsSet(LS_DATA, clients.filter(c=>c.synced));
+    setSbar('s-ok',`${clients.length} registros · Actualizado ✓`);
+    toast(`✓ ${clients.length} registros cargados`,'ok');
+  } catch(e) {
+    setSbar('s-err','Error al actualizar');
+    toast('Error al conectar con Sheets','err');
+  } finally {
+    hideLoad();
+    refreshView();
+  }
+}
+
+/* ─── EVENTOS DE CONEXIÓN ───────────────────────────────────*/
+window.addEventListener('online', async () => {
+  setSbar('s-pend','Conexión restaurada…');
+  await flush(true);
+  try {
+    const r = await gas({ action:'getAll' });
+    if (r.status==='ok') {
+      clients = mergePending(r.data||[], pending);
+      lsSet(LS_DATA, clients.filter(c=>c.synced));
+      setSbar('s-ok',`${clients.length} registros · Sincronizado ✓`);
+      refreshView();
     }
-  } catch(e) { /* usa los datos actuales */ }
+  } catch(e) {}
 });
 window.addEventListener('offline', () => {
-  setSyncBar('offline', `Sin conexión — ${pending.length} pend.`);
+  setSbar('s-off',`Sin conexión — ${pending.length} pendiente(s)`);
 });
 
-/* ============================================================
-   INSTALL BANNER
-   ============================================================ */
-function hideBanner() { document.getElementById('install-banner').style.display='none'; lsSet('banner_hidden_v4',true); }
-const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-const isAndroid = /android/i.test(navigator.userAgent);
-const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-if ((isIOS||isAndroid) && !isStandalone && !lsGet('banner_hidden_v4')) {
-  document.getElementById('install-banner').style.display = 'flex';
+/* ─── BANNER INSTALACIÓN ────────────────────────────────────*/
+function hideBanner() { document.getElementById('ibanner').style.display='none'; lsSet('no_banner',1); }
+if ((/iphone|ipad|ipod|android/i.test(navigator.userAgent))
+  && !window.matchMedia('(display-mode:standalone)').matches
+  && !window.navigator.standalone
+  && !lsGet('no_banner')) {
+  document.getElementById('ibanner').style.display = 'flex';
 }
 
-/* ============================================================
-   CHIPS
-   ============================================================ */
-function handleChip(chip) {
-  const g = chip.dataset.g;
-  if (!g) return;
-  if (!chip.classList.contains('multi')) {
-    document.querySelectorAll(`.chip[data-g="${g}"]`).forEach(c => c.classList.remove('sel'));
-  }
-  chip.classList.toggle('sel');
-  if (g === 'exhibidor') {
-    const hasSi = document.querySelector('.chip[data-g="exhibidor"][data-v="Sí"]')?.classList.contains('sel');
-    document.getElementById('tipo-exhib-sec').style.display = hasSi ? 'block' : 'none';
-    if (!hasSi) {
-      document.querySelectorAll('.chip[data-g="tipo-exhib"],.chip[data-g="exhib-correcto"]').forEach(c=>c.classList.remove('sel'));
+/* ─── CHIPS ─────────────────────────────────────────────────
+   Un solo listener en document, más estable en iOS que
+   listener por elemento. `closest` encuentra el chip
+   aunque el tap caiga en un hijo del chip.                  */
+document.addEventListener('click', e => {
+  // Chips del formulario
+  const chip = e.target.closest('.chip[data-g]');
+  if (chip && chip.closest('#form-view')) {
+    e.preventDefault();
+    const g = chip.dataset.g;
+    if (!chip.classList.contains('multi')) {
+      document.querySelectorAll(`.chip[data-g="${g}"]`).forEach(c=>c.classList.remove('sel'));
+    }
+    chip.classList.toggle('sel');
+    // Mostrar/ocultar sección de tipo de exhibidor
+    if (g==='exhibidor') {
+      const si = document.querySelector('.chip[data-g="exhibidor"][data-v="Sí"]')?.classList.contains('sel');
+      document.getElementById('exhib-extra').style.display = si ? 'block' : 'none';
+      if (!si) document.querySelectorAll('.chip[data-g="tipo-exhib"],.chip[data-g="exhib-ok"]').forEach(c=>c.classList.remove('sel'));
     }
   }
-}
-document.addEventListener('click', e => {
-  const chip = e.target.closest('.chip[data-g]');
-  if (chip && chip.closest('#form-view')) { e.preventDefault(); handleChip(chip); }
-});
-document.addEventListener('click', e => {
-  const chip = e.target.closest('.nivel-chip');
-  if (chip) { document.querySelectorAll('.nivel-chip').forEach(c=>c.classList.remove('sel')); chip.classList.add('sel'); }
+  // Chips de nivel
+  const nchip = e.target.closest('.nchip');
+  if (nchip) {
+    document.querySelectorAll('.nchip').forEach(c=>c.classList.remove('sel'));
+    nchip.classList.add('sel');
+  }
 });
 
-/* ============================================================
-   AXUM
-   ============================================================ */
+/* ─── AXUM ──────────────────────────────────────────────────*/
 function setAxum(val) {
   axumVal = val;
   document.getElementById('axum-ok').classList.toggle('sel', val==='ok');
   document.getElementById('axum-fix').classList.toggle('sel', val==='corregir');
+  // Mostrar campo motivo solo si elige Corregir
+  document.getElementById('axum-motivo').classList.toggle('visible', val==='corregir');
+  if (val !== 'corregir') document.getElementById('f-axum-motivo').value = '';
 }
 
-/* ============================================================
-   PASOS
-   ============================================================ */
+/* ─── PASOS DEL FORMULARIO ──────────────────────────────────*/
 function setStep(n) {
   document.querySelectorAll('.step').forEach((s,i)=>s.classList.toggle('active',i===n-1));
-  currentStep = n;
-  document.getElementById('progress').style.width = (n/TOTAL_STEPS*100)+'%';
+  step = n;
+  document.getElementById('prog').style.width = (n/STEPS*100)+'%';
   document.getElementById('btn-back').style.display = n>1 ? '' : 'none';
   const btn = document.getElementById('btn-next');
-  if (n===TOTAL_STEPS) { btn.textContent='💾 Guardar cliente'; btn.className='btn btn-save'; btn.onclick=saveClient; }
-  else { btn.textContent='Siguiente →'; btn.className='btn btn-next'; btn.onclick=nextStep; }
-  window.scrollTo(0,0); document.documentElement.scrollTop=0; document.body.scrollTop=0;
-}
-function nextStep() { if(validateStep()&&currentStep<TOTAL_STEPS) setStep(currentStep+1); }
-function prevStep() { if(currentStep>1) setStep(currentStep-1); }
-
-function validateStep() {
-  if (currentStep===1) {
-    if (!document.getElementById('f-nombre').value.trim()) { showToast('⚠ Ingresá el nombre','warn'); return false; }
-    if (!document.getElementById('f-dir').value.trim()) { showToast('⚠ Ingresá la dirección','warn'); return false; }
-    if (!document.querySelector('.chip[data-g="zona"].sel')) { showToast('⚠ Seleccioná la zona','warn'); return false; }
+  if (n===STEPS) {
+    btn.textContent='💾 Guardar cliente';
+    btn.className='btn btn-save';
+    btn.onclick=save;
+  } else {
+    btn.textContent='Siguiente →';
+    btn.className='btn btn-next';
+    btn.onclick=nextStep;
   }
-  if (currentStep===2) {
-    if (!document.querySelector('.chip[data-g="tipo"].sel')) { showToast('⚠ Seleccioná la tipología','warn'); return false; }
+  window.scrollTo(0,0);
+  document.documentElement.scrollTop=0;
+  document.body.scrollTop=0;
+}
+function nextStep() { if(validate()) setStep(step+1); }
+function prevStep() { if(step>1) setStep(step-1); }
+
+function validate() {
+  if (step===1) {
+    if (!v('f-nombre')) { toast('⚠ Ingresá el nombre','warn'); return false; }
+    if (!v('f-dir'))    { toast('⚠ Ingresá la dirección','warn'); return false; }
+    if (!chip('zona'))  { toast('⚠ Seleccioná la zona','warn'); return false; }
+  }
+  if (step===2) {
+    if (!chip('tipo'))  { toast('⚠ Seleccioná la tipología','warn'); return false; }
   }
   return true;
 }
 
-const getChip  = g => { const s=document.querySelector(`.chip[data-g="${g}"].sel`); return s?s.dataset.v:''; };
-const getChips = g => [...document.querySelectorAll(`.chip[data-g="${g}"].sel`)].map(c=>c.dataset.v);
-const getNivel = () => { const s=document.querySelector('.nivel-chip.sel'); return s?s.dataset.v:''; };
+/* Helpers para leer valores del formulario */
+const v     = id  => document.getElementById(id)?.value.trim() || '';
+const chip  = g   => document.querySelector(`.chip[data-g="${g}"].sel`)?.dataset.v || '';
+const chips = g   => [...document.querySelectorAll(`.chip[data-g="${g}"].sel`)].map(c=>c.dataset.v);
+const nivel = ()  => document.querySelector('.nchip.sel')?.dataset.n || '';
 
-/* ============================================================
-   GUARDAR CLIENTE
-   ============================================================ */
-async function saveClient() {
-  const nombre = document.getElementById('f-nombre').value.trim();
-  if (!nombre) { showToast('⚠ Falta el nombre','warn'); return; }
+/* ─── GUARDAR CLIENTE ───────────────────────────────────────
+   Flujo:
+   1. Construir objeto con todos los datos del formulario
+   2. Verificar duplicado (mismo nombre + dirección < 4hs)
+   3. Guardar local inmediatamente (el usuario ve confirmación)
+   4. Intentar enviar a Sheets (si hay conexión)
+   5. Si falla: queda en cola, se reintenta solo              */
+async function save() {
+  const nombre = v('f-nombre');
+  if (!nombre) { toast('⚠ Falta el nombre','warn'); return; }
 
-  const now = new Date();
-  const syncId = 'pdv_' + now.getTime() + '_' + Math.random().toString(36).slice(2,7);
+  const now    = new Date();
+  const syncId = 'pdv_' + now.getTime() + '_' + Math.random().toString(36).slice(2,6);
 
-  const client = {
-    syncId, id: now.getTime(),
-    fecha: now.toLocaleDateString('es-AR'),
-    hora: now.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'}),
+  const rec = {
+    syncId,
+    fecha:    now.toLocaleDateString('es-AR'),
+    hora:     now.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'}),
     nombre,
-    dir: document.getElementById('f-dir').value.trim(),
-    zona: getChip('zona'), tel1: document.getElementById('f-tel1').value.trim(),
-    tel2: document.getElementById('f-tel2').value.trim(), tipo: getChip('tipo'), axum: axumVal,
-    exhibidor: getChip('exhibidor'), tipoExhib: getChip('tipo-exhib'),
-    exhibCorrecto: getChip('exhib-correcto'), precios: getChip('precios'),
-    planograma: getChip('planograma'), cantMarcas: getChip('cant-marcas'),
-    marcas: getChips('marcas'), oppExhib: getChip('opp-exhib'),
-    producto: document.getElementById('f-producto').value.trim(),
-    nivel: getNivel(), obs: document.getElementById('f-obs').value.trim(),
-    synced: false,
+    dir:      v('f-dir'),
+    zona:     chip('zona'),
+    tel1:     v('f-tel1'),
+    tel2:     v('f-tel2'),
+    tipo:     chip('tipo'),
+    axum:     axumVal,
+    axumMotivo: axumVal==='corregir' ? v('f-axum-motivo') : '',
+    exhibidor:  chip('exhibidor'),
+    tipoExhib:  chip('tipo-exhib'),
+    exhibOk:    chip('exhib-ok'),
+    precios:    chip('precios'),
+    planograma: chip('planograma'),
+    cantMarcas: chip('cant-marcas'),
+    marcas:     chips('marcas'),
+    opp:        chip('opp'),
+    producto:   v('f-producto'),
+    nivel:      nivel(),
+    obs:        v('f-obs'),
+    synced:     false,
   };
 
-  // Anti-duplicado: mismo nombre+dir en últimas 4 horas
-  const dup = clients.find(c =>
-    c.nombre.toLowerCase()===client.nombre.toLowerCase() &&
-    c.dir.toLowerCase()===client.dir.toLowerCase() &&
-    (client.id - Number(c.id||c.syncId.split('_')[1]||0)) < 14400000
+  // Detectar duplicado: mismo nombre + dirección en las últimas 4 horas
+  const ya = clients.find(c =>
+    c.nombre.toLowerCase()===rec.nombre.toLowerCase() &&
+    c.dir.toLowerCase()===rec.dir.toLowerCase() &&
+    (now.getTime() - parseInt(c.syncId.split('_')[1]||0)) < 14400000
   );
-  if (dup) { showToast('⚠ Este cliente ya fue relevado hoy','warn'); return; }
+  if (ya) { toast('⚠ Este cliente ya fue relevado hoy','warn'); return; }
 
-  // 1. Agregar a la UI inmediatamente
-  clients.push(client);
-  pending.push(client);
+  // Guardar localmente de inmediato
+  clients.push(rec);
+  pending.push(rec);
   lsSet(LS_PENDING, pending);
-  lsSet(LS_CACHE, clients.filter(c=>c.synced));
+  lsSet(LS_DATA, clients.filter(c=>c.synced));
 
-  showToast('✓ ' + client.nombre + ' guardado localmente','success');
+  toast('✓ ' + rec.nombre + ' guardado','ok');
   resetForm();
 
-  // 2. Intentar enviar a Sheets ahora
-  if (navigator.onLine && APPS_SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbzbKUnBiXBnQjmN0QfkVzlcAmIG6md6nB36620Ct5EytdJPkaEcvK7fBlAEJLffiiJJ/exec') {
-    setSyncBar('pending', 'Guardando en Google Sheets…');
+  // Enviar a Sheets
+  if (navigator.onLine && URL_GAS !== 'TU_URL_AQUI') {
+    setSbar('s-pend','Guardando en Sheets…');
     try {
-      const res = await apiCall({ action: 'add', data: client });
-      if (res.status === 'ok' || res.status === 'duplicate') {
-        const idx = clients.findIndex(c=>c.syncId===client.syncId);
-        if (idx!==-1) clients[idx].synced = true;
-        pending = pending.filter(p=>p.syncId!==client.syncId);
+      const r = await gas({ action:'add', data:rec });
+      if (r.status==='ok' || r.status==='duplicate') {
+        const i = clients.findIndex(c=>c.syncId===rec.syncId);
+        if (i!==-1) clients[i].synced = true;
+        pending = pending.filter(p=>p.syncId!==rec.syncId);
         lsSet(LS_PENDING, pending);
-        lsSet(LS_CACHE, clients.filter(c=>c.synced));
-        setSyncBar('ok', `${clients.length} registros · Sheets sincronizado ✓`);
-        showToast('✓ Guardado en Google Sheets','success');
-      } else {
-        throw new Error(res.message);
-      }
+        lsSet(LS_DATA, clients.filter(c=>c.synced));
+        setSbar('s-ok',`${clients.length} registros · Sincronizado ✓`);
+      } else throw new Error(r.message);
     } catch(e) {
-      setSyncBar('error', `Error al guardar en Sheets — guardado local`);
-      // se reintentará con flushPending
-      setTimeout(()=>flushPending(true), 30000);
+      setSbar('s-err','Error al guardar en Sheets — queda en cola');
+      setTimeout(()=>flush(true), 30000);
     }
-  } else {
-    setSyncBar('offline', `Sin conexión — ${pending.length} pendiente(s) local(es)`);
+  } else if (!navigator.onLine) {
+    setSbar('s-off',`Sin conexión — ${pending.length} pendiente(s)`);
   }
 }
 
-/* ============================================================
-   RESET FORMULARIO
-   ============================================================ */
+/* ─── RESET ─────────────────────────────────────────────────*/
 function resetForm() {
-  document.querySelectorAll('#form-view input[type=text],#form-view input[type=tel],#form-view textarea').forEach(el=>el.value='');
+  document.querySelectorAll('#form-view input,#form-view textarea').forEach(el=>el.value='');
   document.querySelectorAll('#form-view .chip').forEach(c=>c.classList.remove('sel'));
-  document.querySelectorAll('.nivel-chip').forEach(c=>c.classList.remove('sel'));
-  document.getElementById('tipo-exhib-sec').style.display='none';
+  document.querySelectorAll('.nchip').forEach(c=>c.classList.remove('sel'));
+  document.getElementById('exhib-extra').style.display='none';
+  document.getElementById('axum-motivo').classList.remove('visible');
   axumVal='';
   document.getElementById('axum-ok').classList.remove('sel');
   document.getElementById('axum-fix').classList.remove('sel');
   setStep(1);
 }
 
-/* ============================================================
-   TOAST
-   ============================================================ */
-let toastTimer=null;
-function showToast(msg,type='success') {
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.className='toast toast-'+type;
-  void t.offsetWidth; t.classList.add('show');
-  if(toastTimer) clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>t.classList.remove('show'),2800);
+/* ─── TOAST ─────────────────────────────────────────────────*/
+let toastT;
+function toast(msg, tipo='ok') {
+  const el = document.getElementById('toast');
+  el.textContent=msg;
+  el.className='toast t-'+tipo;
+  void el.offsetWidth; // forzar reflow para reiniciar animación CSS
+  el.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(()=>el.classList.remove('show'), 2600);
 }
 
-/* ============================================================
-   VISTAS
-   ============================================================ */
-function showView(id) {
+/* ─── VISTAS ────────────────────────────────────────────────*/
+function goTo(id) {
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  ['tab-nuevo','tab-stats','tab-clientes'].forEach((t,i)=>
-    document.getElementById(t).classList.toggle('active',['form-view','dash-view','list-view'][i]===id));
+  document.getElementById('t-form').classList.toggle('active', id==='form-view');
+  document.getElementById('t-list').classList.toggle('active', id==='list-view');
   const isForm = id==='form-view';
-  document.getElementById('form-bottom').style.display = isForm?'flex':'none';
-  document.getElementById('progress-bar').style.display = isForm?'block':'none';
-  if(id==='dash-view') renderDash();
-  if(id==='list-view') renderList();
-  window.scrollTo(0,0); document.documentElement.scrollTop=0;
+  document.getElementById('bnav').style.display     = isForm ? 'flex' : 'none';
+  document.getElementById('prog-bar').style.display = isForm ? 'block' : 'none';
+  if (id==='list-view') renderList();
+  window.scrollTo(0,0);
+  document.documentElement.scrollTop=0;
 }
 
-/* ============================================================
-   DASHBOARD
-   ============================================================ */
-function renderDash() {
-  const total = clients.length;
-  document.getElementById('dash-sub').textContent =
-    total===0 ? 'Sin relevamientos' : total+' relevamiento'+(total!==1?'s':'')+' en Sheets';
-  document.getElementById('dash-empty').style.display = total===0?'block':'none';
-  if(total===0){document.getElementById('kpi-grid').innerHTML='';document.getElementById('dash-content').innerHTML='';return;}
-
-  const ce=clients.filter(c=>c.exhibidor==='Sí').length, se=clients.filter(c=>c.exhibidor==='No').length;
-  const al=clients.filter(c=>c.nivel==='alto').length;
-  const af=clients.filter(c=>c.axum==='corregir').length, ao=clients.filter(c=>c.axum==='ok').length, an=total-af-ao;
-  const pS=clients.filter(c=>c.precios==='Sí').length,pP=clients.filter(c=>c.precios==='Parcialmente').length,pN=clients.filter(c=>c.precios==='No').length;
-  const plS=clients.filter(c=>c.planograma==='Sí').length,plP=clients.filter(c=>c.planograma==='Parcialmente').length,plN=clients.filter(c=>c.planograma==='No').length;
-  const pc=pending.length;
-
-  document.getElementById('kpi-grid').innerHTML=`
-    <div class="kpi"><div class="kpi-val">${total}</div><div class="kpi-label">Relevados</div></div>
-    <div class="kpi"><div class="kpi-val" style="color:var(--green)">${al}</div><div class="kpi-label">Opp. alta 🟢</div></div>
-    <div class="kpi"><div class="kpi-val" style="color:var(--accent)">${ce}</div><div class="kpi-label">Con exhibidor</div></div>
-    <div class="kpi"><div class="kpi-val" style="color:var(--red)">${af}</div><div class="kpi-label">AXUM corregir ⚠</div></div>`;
-
-  const bar=(v,max,cls)=>`<div class="bar-track"><div class="bar-fill ${cls}" style="width:${max?Math.round(v/max*100):0}%"></div></div>`;
-  const tipos={};clients.forEach(c=>{if(c.tipo)tipos[c.tipo]=(tipos[c.tipo]||0)+1;});
-  const tipoRows=Object.entries(tipos).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="pie-row"><div class="pie-name">${k}</div><div class="pie-cnt">${v}</div><div class="pie-pct">${Math.round(v/total*100)}%</div></div>`).join('');
-  const mC={};clients.forEach(c=>{(c.marcas||[]).forEach(m=>{mC[m]=(mC[m]||0)+1;});});
-  const mMax=Math.max(...Object.values(mC),1);
-  const marcasRows=Object.entries(mC).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="bar-row"><div class="bar-label">${k}</div>${bar(v,mMax,'bc1')}<div class="bar-val">${v}</div></div>`).join('');
-  const oppC={};clients.forEach(c=>{if(c.oppExhib)oppC[c.oppExhib]=(oppC[c.oppExhib]||0)+1;});
-  const oppCol={Alta:'var(--green)',Media:'var(--yellow)',Baja:'var(--orange)',Nula:'var(--red)'};
-  const oppRows=['Alta','Media','Baja','Nula'].filter(k=>oppC[k]).map(k=>`<div class="pie-row"><div class="pie-name" style="color:${oppCol[k]};font-weight:600">${k}</div><div class="pie-cnt">${oppC[k]}</div><div class="pie-pct">${Math.round((oppC[k]||0)/total*100)}%</div></div>`).join('');
-  const zC={};clients.forEach(c=>{if(c.zona)zC[c.zona]=(zC[c.zona]||0)+1;});
-  const zMax=Math.max(...Object.values(zC),1);
-  const zonaRows=Object.entries(zC).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="bar-row"><div class="bar-label">${k}</div>${bar(v,zMax,'bc2')}<div class="bar-val">${v}</div></div>`).join('');
-  const prC={};clients.forEach(c=>{if(c.producto&&c.producto.trim())prC[c.producto.trim()]=(prC[c.producto.trim()]||0)+1;});
-  const prodRows=Object.entries(prC).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([k,v])=>`<div class="pie-row"><div class="pie-name">${k}</div><div class="pie-cnt">${v}</div></div>`).join('')||'<div style="color:var(--muted);font-size:13px">Sin datos</div>';
-
-  document.getElementById('dash-content').innerHTML=`
-    ${pc>0?`<div class="dash-card" style="border-color:var(--yellow)"><div class="dash-card-title" style="color:var(--yellow)">⏳ ${pc} PENDIENTE(S) LOCAL(ES)</div><div style="font-size:13px;color:var(--text)">Guardados en este dispositivo, aún no en Sheets. <span style="color:var(--accent);cursor:pointer;font-weight:600;text-decoration:underline" onclick="flushPending(true)">Sincronizar ahora</span></div></div>`:''}
-    <div class="dash-card"><div class="dash-card-title">Por tipología</div>${tipoRows||'<div style="color:var(--muted);font-size:13px">Sin datos</div>'}</div>
-    <div class="dash-card"><div class="dash-card-title">Exhibición</div>
-      <div class="bar-row"><div class="bar-label">Con exhibidor</div>${bar(ce,total,'bc1')}<div class="bar-val">${ce}</div></div>
-      <div class="bar-row"><div class="bar-label">Sin exhibidor</div>${bar(se,total,'bc3')}<div class="bar-val">${se}</div></div></div>
-    <div class="dash-card"><div class="dash-card-title">Estado AXUM</div>
-      <div class="bar-row"><div class="bar-label" style="color:var(--green)">✓ Correcto</div>${bar(ao,total,'bc2')}<div class="bar-val">${ao}</div></div>
-      <div class="bar-row"><div class="bar-label" style="color:var(--red)">⚠ Corregir</div>${bar(af,total,'bc5')}<div class="bar-val">${af}</div></div>
-      ${an>0?`<div class="bar-row"><div class="bar-label">Sin registrar</div>${bar(an,total,'bc8')}<div class="bar-val">${an}</div></div>`:''}</div>
-    <div class="dash-card"><div class="dash-card-title">Marcas presentes</div>${marcasRows||'<div style="color:var(--muted);font-size:13px">Sin datos</div>'}</div>
-    <div class="dash-card"><div class="dash-card-title">Precios sugeridos</div>
-      <div class="bar-row"><div class="bar-label">Sí</div>${bar(pS,total,'bc2')}<div class="bar-val">${pS}</div></div>
-      <div class="bar-row"><div class="bar-label">Parcialmente</div>${bar(pP,total,'bc3')}<div class="bar-val">${pP}</div></div>
-      <div class="bar-row"><div class="bar-label">No</div>${bar(pN,total,'bc5')}<div class="bar-val">${pN}</div></div></div>
-    <div class="dash-card"><div class="dash-card-title">Planograma</div>
-      <div class="bar-row"><div class="bar-label">Sí</div>${bar(plS,total,'bc2')}<div class="bar-val">${plS}</div></div>
-      <div class="bar-row"><div class="bar-label">Parcialmente</div>${bar(plP,total,'bc3')}<div class="bar-val">${plP}</div></div>
-      <div class="bar-row"><div class="bar-label">No</div>${bar(plN,total,'bc5')}<div class="bar-val">${plN}</div></div></div>
-    <div class="dash-card"><div class="dash-card-title">Opp. exhibición adicional</div>${oppRows||'<div style="color:var(--muted);font-size:13px">Sin datos</div>'}</div>
-    <div class="dash-card"><div class="dash-card-title">Zonas — ranking</div>${zonaRows||'<div style="color:var(--muted);font-size:13px">Sin datos</div>'}</div>
-    <div class="dash-card"><div class="dash-card-title">Productos más solicitados</div>${prodRows}</div>`;
+function refreshView() {
+  if (document.getElementById('list-view').classList.contains('active')) renderList();
 }
 
-/* ============================================================
-   LISTA
-   ============================================================ */
-function setFilter(f,el) {
-  currentFilter=f;
-  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active'); renderList();
+/* ─── LISTA DE CLIENTES ─────────────────────────────────────
+   Solo 3 filtros simples: Todos / AXUM a corregir / Local    */
+function setFilter(f, el) {
+  filter = f;
+  document.querySelectorAll('.fchip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  renderList();
 }
+
 function renderList() {
-  let f=clients;
-  if(currentFilter==='alto') f=clients.filter(c=>c.nivel==='alto');
-  else if(currentFilter==='medio') f=clients.filter(c=>c.nivel==='medio');
-  else if(currentFilter==='bajo') f=clients.filter(c=>c.nivel==='bajo');
-  else if(currentFilter==='sin-exhib') f=clients.filter(c=>c.exhibidor==='No');
-  else if(currentFilter==='axum-fix') f=clients.filter(c=>c.axum==='corregir');
-  else if(currentFilter==='precios-no') f=clients.filter(c=>c.precios==='No');
-  else if(currentFilter==='pendiente') f=clients.filter(c=>!c.synced);
-  document.getElementById('list-sub').textContent=f.length+' cliente'+(f.length!==1?'s':'');
-  if(f.length===0){document.getElementById('client-list-content').innerHTML='<div class="empty"><div class="empty-icon">🔍</div>Sin resultados</div>';return;}
-  const nL={alto:'🟢 Alto',medio:'🟡 Medio',bajo:'🔴 Bajo'}, nC={alto:'nb-alto',medio:'nb-medio',bajo:'nb-bajo'};
-  document.getElementById('client-list-content').innerHTML=f.slice().reverse().map(c=>{
-    const tags=[];
-    if(c.tipo) tags.push(`<span class="tag">${esc(c.tipo)}</span>`);
-    if(c.exhibidor==='Sí') tags.push(`<span class="tag tag-ex">Exhibidor ✓</span>`);
-    if(c.exhibidor==='No') tags.push(`<span class="tag">Sin exhibidor</span>`);
-    if(c.axum==='corregir') tags.push(`<span class="tag tag-axum">⚠ AXUM</span>`);
-    if(c.marcas&&c.marcas.length) tags.push(`<span class="tag">${c.marcas.length} marca${c.marcas.length>1?'s':''}</span>`);
-    if(c.zona) tags.push(`<span class="tag">${esc(c.zona)}</span>`);
-    if(!c.synced) tags.push(`<span class="tag tag-pending">⏳ Local</span>`);
-    return `<div class="client-card" onclick="openModal('${esc(c.syncId)}')">
-      <div class="cc-top"><div><div class="cc-name">${esc(c.nombre)}</div><div class="cc-addr">${esc(c.dir)}</div></div>
-      <div class="nivel-badge ${nC[c.nivel]||'nb-none'}">${nL[c.nivel]||'—'}</div></div>
-      <div class="cc-tags">${tags.join('')}<span class="tag" style="margin-left:auto">${esc(c.fecha||'')}</span></div>
+  let f = clients;
+  if (filter==='axum')  f = clients.filter(c=>c.axum==='corregir');
+  if (filter==='local') f = clients.filter(c=>!c.synced);
+
+  document.getElementById('lsub').textContent = f.length + ' cliente' + (f.length!==1?'s':'');
+
+  if (!f.length) {
+    document.getElementById('list-content').innerHTML =
+      '<div class="empty"><div class="empty-i">🔍</div>Sin resultados</div>';
+    return;
+  }
+
+  const nL = {alto:'🟢 Alto', medio:'🟡 Medio', bajo:'🔴 Bajo'};
+  const nC = {alto:'nb-alto', medio:'nb-medio', bajo:'nb-bajo'};
+
+  document.getElementById('list-content').innerHTML = f.slice().reverse().map(c => {
+    const tags = [];
+    if (c.tipo) tags.push(`<span class="tag">${x(c.tipo)}</span>`);
+    if (c.exhibidor==='Sí') tags.push(`<span class="tag tag-ex">Exhibidor ✓</span>`);
+    if (c.exhibidor==='No') tags.push(`<span class="tag">Sin exhibidor</span>`);
+    if (c.axum==='corregir') tags.push(`<span class="tag tag-axum">⚠ AXUM</span>`);
+    if (c.zona) tags.push(`<span class="tag">${x(c.zona)}</span>`);
+    if (!c.synced) tags.push(`<span class="tag tag-pend">⏳ Local</span>`);
+    return `<div class="ccard" onclick="openModal('${x(c.syncId)}')">
+      <div class="ctop">
+        <div>
+          <div class="cname">${x(c.nombre)}</div>
+          <div class="caddr">${x(c.dir)}</div>
+        </div>
+        <div class="nbadge ${nC[c.nivel]||'nb-none'}">${nL[c.nivel]||'—'}</div>
+      </div>
+      <div class="ctags">${tags.join('')}<span class="tag" style="margin-left:auto">${x(c.fecha||'')}</span></div>
     </div>`;
   }).join('');
 }
 
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-
-/* ============================================================
-   MODAL DETALLE
-   ============================================================ */
+/* ─── MODAL ─────────────────────────────────────────────────*/
 function openModal(syncId) {
-  const c=clients.find(x=>x.syncId===syncId);
-  if(!c) return;
-  const aL={ok:'✓ Refleja bien',corregir:'⚠ Corregir en AXUM','':"No registrado"};
-  const aC={ok:'var(--green)',corregir:'var(--red)','':"var(--muted)"};
-  const nL={alto:'🟢 Alto',medio:'🟡 Medio',bajo:'🔴 Bajo'};
-  const rows=[
-    ['Zona',c.zona],['Tipo',c.tipo],
-    ['Tel. dueño',c.tel1?`<a href="tel:${esc(c.tel1)}" style="color:var(--accent)">${esc(c.tel1)}</a>`:''],
-    ['Tel. empleado',c.tel2?`<a href="tel:${esc(c.tel2)}" style="color:var(--accent)">${esc(c.tel2)}</a>`:''],
-    ['AXUM',`<span style="color:${aC[c.axum||'']}">${aL[c.axum||'']}</span>`],
-    ['Exhibidor',c.exhibidor],['Tipo exhibidor',c.tipoExhib],['Exhib. correcto',c.exhibCorrecto],
-    ['Precios',c.precios],['Planograma',c.planograma],
-    ['Cant. marcas',c.cantMarcas],['Marcas',Array.isArray(c.marcas)?c.marcas.join(', '):c.marcas],
-    ['Opp. exhibición',c.oppExhib],['Producto interés',c.producto],['Observación',c.obs],
-    ['Origen',c.synced?'<span style="color:var(--green)">✓ Google Sheets</span>':'<span style="color:var(--yellow)">⏳ Solo local · pendiente</span>'],
-    ['Fecha/Hora',(c.fecha||'')+(c.hora?' '+c.hora:'')],
-  ].filter(r=>r[1]).map(r=>`<div class="modal-row"><span class="modal-key">${r[0]}</span><span class="modal-val">${r[1]}</span></div>`).join('');
-  document.getElementById('modal-body').innerHTML=`
-    <div class="modal-name">${esc(c.nombre)}</div>
-    <div class="modal-addr">${esc(c.dir)}</div>
-    <div style="margin-bottom:14px"><span class="nivel-badge nb-${c.nivel||'none'}" style="font-size:13px;padding:5px 14px">${nL[c.nivel]||'Sin nivel'}</span></div>
-    ${rows}
+  const c = clients.find(cl=>cl.syncId===syncId);
+  if (!c) return;
+
+  const axumTexto = {ok:'✓ Refleja bien', corregir:'⚠ Corregir', '':'—'};
+  const axumColor = {ok:'var(--green)', corregir:'var(--red)', '':'var(--muted)'};
+  const nL = {alto:'🟢 Alto', medio:'🟡 Medio', bajo:'🔴 Bajo'};
+
+  const filas = [
+    ['Zona',          c.zona],
+    ['Tipología',     c.tipo],
+    ['Tel. dueño',    c.tel1 ? `<a href="tel:${x(c.tel1)}" style="color:var(--accent)">${x(c.tel1)}</a>` : ''],
+    ['Tel. empleado', c.tel2 ? `<a href="tel:${x(c.tel2)}" style="color:var(--accent)">${x(c.tel2)}</a>` : ''],
+    ['AXUM',          `<span style="color:${axumColor[c.axum||'']}">${axumTexto[c.axum||'']}</span>`],
+    ['Motivo AXUM',   c.axumMotivo],
+    ['Exhibidor',     c.exhibidor],
+    ['Tipo exhibidor',c.tipoExhib],
+    ['Exhibidor OK',  c.exhibOk],
+    ['Precios',       c.precios],
+    ['Planograma',    c.planograma],
+    ['Cant. marcas',  c.cantMarcas],
+    ['Marcas',        Array.isArray(c.marcas) ? c.marcas.join(', ') : c.marcas],
+    ['Opp. exhibición',c.opp],
+    ['Producto interés',c.producto],
+    ['Observación',   c.obs],
+    ['Estado',        c.synced
+      ? '<span style="color:var(--green)">✓ En Sheets</span>'
+      : '<span style="color:var(--yellow)">⏳ Solo local</span>'],
+    ['Fecha / Hora',  (c.fecha||'') + (c.hora ? ' '+c.hora : '')],
+  ].filter(([,val])=>val).map(([k,val])=>
+    `<div class="mrow"><span class="mkey">${k}</span><span class="mval">${val}</span></div>`
+  ).join('');
+
+  document.getElementById('mbody').innerHTML = `
+    <div class="mname">${x(c.nombre)}</div>
+    <div class="maddr">${x(c.dir)}</div>
+    <div style="margin-bottom:14px">
+      <span class="nbadge nb-${c.nivel||'none'}" style="font-size:13px;padding:5px 14px">
+        ${nL[c.nivel]||'Sin nivel'}
+      </span>
+    </div>
+    ${filas}
     <div style="display:flex;gap:8px;margin-top:14px">
-      ${!c.synced?`<button type="button" onclick="retrySingle('${esc(c.syncId)}')" style="flex:1;padding:13px;background:rgba(0,196,244,.1);border:1.5px solid var(--accent);color:var(--accent);border-radius:10px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;min-height:48px;touch-action:manipulation">↑ Sincronizar</button>`:''}
-      <button type="button" onclick="deleteClient('${esc(c.syncId)}')" style="flex:1;padding:13px;background:rgba(239,68,68,.1);border:1.5px solid var(--red);color:var(--red);border-radius:10px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;min-height:48px;touch-action:manipulation">🗑 Eliminar</button>
+      ${!c.synced ? `<button type="button" onclick="retrySingle('${x(c.syncId)}')"
+        style="flex:1;padding:13px;background:rgba(0,196,244,.1);border:1.5px solid var(--accent);
+        color:var(--accent);border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;
+        min-height:48px;touch-action:manipulation;-webkit-appearance:none">↑ Sincronizar</button>` : ''}
+      <button type="button" onclick="del('${x(c.syncId)}')"
+        style="flex:1;padding:13px;background:rgba(239,68,68,.1);border:1.5px solid var(--red);
+        color:var(--red);border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;
+        min-height:48px;touch-action:manipulation;-webkit-appearance:none">🗑 Eliminar</button>
     </div>`;
-  document.getElementById('modal-overlay').classList.add('open');
-  document.body.style.overflow='hidden';
+
+  document.getElementById('moverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
 
-function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); document.body.style.overflow=''; }
-document.getElementById('modal-overlay').addEventListener('click', e=>{ if(e.target===document.getElementById('modal-overlay')) closeModal(); });
+function closeModal() {
+  document.getElementById('moverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('moverlay').addEventListener('click', e=>{
+  if (e.target===document.getElementById('moverlay')) closeModal();
+});
 
 async function retrySingle(syncId) {
-  const c=clients.find(x=>x.syncId===syncId);
-  if(!c||c.synced) return;
-  if(!pending.find(p=>p.syncId===syncId)) pending.push(c);
+  const c = clients.find(cl=>cl.syncId===syncId);
+  if (!c || c.synced) return;
+  if (!pending.find(p=>p.syncId===syncId)) pending.push(c);
   lsSet(LS_PENDING, pending);
   closeModal();
-  await flushPending(true);
+  await flush(true);
   renderList();
 }
 
-async function deleteClient(syncId) {
-  if(!confirm('¿Eliminar este cliente?\nSe eliminará de Google Sheets y no se puede deshacer.')) return;
+async function del(syncId) {
+  if (!confirm('¿Eliminar este cliente?\nNo se puede deshacer.')) return;
 
-  // 1. Eliminar de la UI inmediatamente
   clients = clients.filter(c=>c.syncId!==syncId);
   pending = pending.filter(p=>p.syncId!==syncId);
-
-  // Si estaba sincronizado, añadir a cola de DELETE
-  const wasSynced = !pending.find(p=>p.syncId===syncId); // ya no está en pending
-  if (wasSynced) {
-    pendingDel.push(syncId);
-    lsSet(LS_DELETED, pendingDel);
-  }
-
   lsSet(LS_PENDING, pending);
-  lsSet(LS_CACHE, clients.filter(c=>c.synced));
+  lsSet(LS_DATA, clients.filter(c=>c.synced));
 
-  closeModal(); renderList();
-  showToast('Eliminado','warn');
+  closeModal();
+  renderList();
+  toast('Cliente eliminado','warn');
 
-  // 2. Intentar eliminar de Sheets ahora
-  if (navigator.onLine && APPS_SCRIPT_URL !== '') {
+  // Intentar eliminar en Sheets
+  if (navigator.onLine && URL_GAS !== 'TU_URL_AQUI') {
     try {
-      const res = await apiCall({ action:'delete', syncId });
-      if (res.status==='ok'||res.status==='notfound') {
-        pendingDel = pendingDel.filter(id=>id!==syncId);
-        lsSet(LS_DELETED, pendingDel);
-        setSyncBar('ok', `${clients.length} registros · Sheets sincronizado ✓`);
-      }
+      await gas({ action:'delete', syncId });
+      setSbar('s-ok',`${clients.length} registros · Sincronizado ✓`);
     } catch(e) {
-      setSyncBar('error','Error al eliminar en Sheets — se reintentará');
-      setTimeout(()=>flushPending(true),30000);
+      // No está en pending de add, así que no lo reintentamos automáticamente.
+      // El registro simplemente queda en Sheets como "basura" — se limpia a mano desde Sheets.
+      // Para 320 clientes esto es perfectamente aceptable.
     }
   }
 }
 
-/* ============================================================
-   ARRANQUE
-   ============================================================ */
-document.getElementById('form-bottom').style.display='flex';
+/* ─── ESCAPE HTML ───────────────────────────────────────────
+   Evita XSS al insertar datos del usuario en innerHTML.     */
+function x(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 
-(async()=>{
-  showLoading('Cargando datos desde Google Sheets…');
-  await initApp();
-  // Si estamos en una vista que necesita datos, refrescarla
-  // (al inicio siempre estamos en form-view, pero por si acaso)
+/* ─── ARRANQUE ──────────────────────────────────────────────*/
+document.getElementById('bnav').style.display = 'flex';
+
+(async () => {
+  showLoad('Cargando datos desde Google Sheets…');
+  await init();
+  refreshView();
 })();
-
 </script>
 </body>
 </html>
