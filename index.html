@@ -11,230 +11,275 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0A0A0F; --bg2:#13131A; --bg3:#1C1C26; --card:#1E1E2A;
+  --bg:#0A0A0F; --bg3:#1C1C26; --card:#1E1E2A;
   --border:#2E2E3E; --text:#F0F0F5; --muted:#8888A0;
   --accent:#00C4F4; --green:#22C55E; --yellow:#EAB308;
   --red:#EF4444; --orange:#F97316;
   --r:14px; --rs:10px;
-  --sb:env(safe-area-inset-bottom,0px); --st:env(safe-area-inset-top,0px);
+  --sb:env(safe-area-inset-bottom,0px);
+  --st:env(safe-area-inset-top,0px);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{font-size:16px;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;height:-webkit-fill-available}
 body{min-height:100vh;min-height:-webkit-fill-available;overscroll-behavior:none;-webkit-overflow-scrolling:touch}
-input,select,textarea,button{font-size:16px !important;font-family:'DM Sans',sans-serif}
+input,textarea,button{font-size:16px !important;font-family:'DM Sans',sans-serif}
 
 /* NAV */
-.nav{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;padding-top:calc(10px + var(--st));background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
-.nav-logo{display:flex;align-items:center;gap:8px}
-.nav-logo svg{width:24px;height:24px;flex-shrink:0}
-.nav-title{font-size:14px;font-weight:700}
+.nav{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 16px;padding-top:calc(10px + var(--st));
+  background:var(--bg);border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:100;
+}
+.nav svg{width:24px;height:24px;flex-shrink:0}
+.nav-title{font-size:15px;font-weight:700}
 .nav-title span{color:var(--accent)}
-.nav-tabs{display:flex;gap:3px;background:var(--bg3);border-radius:10px;padding:3px}
-.nav-tab{padding:7px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;color:var(--muted);border:none;background:transparent;min-height:44px;display:flex;align-items:center;touch-action:manipulation;-webkit-appearance:none}
-.nav-tab.active{background:var(--card);color:var(--text)}
-.nav-tab:active{opacity:.7}
-
-/* SYNC BAR */
-.sbar{display:flex;align-items:center;justify-content:space-between;padding:7px 16px;font-size:12px;font-weight:600;border-bottom:1px solid var(--border)}
-.sdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-right:7px}
-.sleft{display:flex;align-items:center}
-.s-ok .sdot{background:var(--green)} .s-ok{color:var(--green)}
-.s-pend .sdot{background:var(--yellow);animation:blink 1s infinite} .s-pend{color:var(--yellow)}
-.s-err .sdot{background:var(--red)} .s-err{color:var(--red)}
-.s-off .sdot{background:var(--muted)} .s-off{color:var(--muted)}
-.s-load .sdot{background:var(--accent);animation:blink .7s infinite} .s-load{color:var(--accent)}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.reload-btn{background:none;border:none;color:var(--accent);font-size:12px;font-weight:700;cursor:pointer;padding:4px 8px;border-radius:6px;touch-action:manipulation;min-height:32px;-webkit-appearance:none}
-.reload-btn:active{opacity:.6}
-
-/* VIEWS */
-.view{display:none;padding-bottom:calc(80px + var(--sb))}
-.view.active{display:block}
 
 /* PROGRESS */
-.prog-bar{height:3px;background:var(--border)}
-.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),#0099D4);transition:width .35s ease}
+.prog{height:3px;background:var(--border)}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),#0099D4);transition:width .3s ease}
+
+/* SYNC BAR */
+.sbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:7px 16px;font-size:12px;font-weight:600;
+  border-bottom:1px solid var(--border);
+}
+.sbar .left{display:flex;align-items:center;gap:7px}
+.dot{width:8px;height:8px;border-radius:50%}
+.s-ok{color:var(--green)} .s-ok .dot{background:var(--green)}
+.s-pend{color:var(--yellow)} .s-pend .dot{background:var(--yellow);animation:blink 1s infinite}
+.s-err{color:var(--red)} .s-err .dot{background:var(--red)}
+.s-off{color:var(--muted)} .s-off .dot{background:var(--muted)}
+.s-load{color:var(--accent)} .s-load .dot{background:var(--accent);animation:blink .7s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.rbtn{
+  background:none;border:none;color:var(--accent);
+  font-size:12px;font-weight:700;cursor:pointer;
+  padding:4px 8px;border-radius:6px;min-height:32px;
+  touch-action:manipulation;-webkit-appearance:none;
+}
 
 /* LOADING */
-.loading{position:fixed;inset:0;background:rgba(10,10,15,.88);z-index:300;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+.loading{
+  position:fixed;inset:0;background:rgba(10,10,15,.9);
+  z-index:300;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:14px;
+}
 .loading.off{display:none}
-.spinner{width:38px;height:38px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+.spin{
+  width:36px;height:36px;border:3px solid var(--border);
+  border-top-color:var(--accent);border-radius:50%;
+  animation:spin .8s linear infinite;
+}
 @keyframes spin{to{transform:rotate(360deg)}}
-.loading p{font-size:14px;font-weight:600;color:var(--muted)}
+.loading p{font-size:14px;color:var(--muted);font-weight:600}
 
 /* FORM */
-.fwrap{padding:16px}
+.form{padding:16px;padding-bottom:calc(90px + var(--sb))}
 .step{display:none}.step.active{display:block}
-.sbadge{background:var(--accent);color:#000;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;display:inline-block;letter-spacing:.5px}
-.stitle{font-size:20px;font-weight:700;margin-top:6px;letter-spacing:-.3px}
-.ssub{font-size:13px;color:var(--muted);margin-top:3px;margin-bottom:20px}
+.badge{
+  background:var(--accent);color:#000;font-size:11px;
+  font-weight:700;padding:3px 10px;border-radius:20px;
+  display:inline-block;letter-spacing:.5px;
+}
+.title{font-size:20px;font-weight:700;margin-top:6px;letter-spacing:-.3px}
+.sub{font-size:13px;color:var(--muted);margin-top:3px;margin-bottom:20px}
 
+/* FIELDS */
 .field{margin-bottom:16px}
-.field label{display:block;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px}
-.field input,.field textarea{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);color:var(--text);font-size:16px !important;padding:14px 16px;outline:none;-webkit-appearance:none;appearance:none;-webkit-text-fill-color:var(--text);transition:border-color .2s}
+.field label{
+  display:block;font-size:11px;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px;
+}
+.field input,.field textarea{
+  width:100%;background:var(--card);border:1.5px solid var(--border);
+  border-radius:var(--rs);color:var(--text);
+  font-size:16px !important;padding:14px 16px;
+  outline:none;-webkit-appearance:none;appearance:none;
+  -webkit-text-fill-color:var(--text);transition:border-color .2s;
+}
 .field input:focus,.field textarea:focus{border-color:var(--accent)}
-.field input:-webkit-autofill,.field input:-webkit-autofill:focus{-webkit-box-shadow:0 0 0 1000px var(--card) inset !important;-webkit-text-fill-color:var(--text) !important}
-.field input::placeholder,.field textarea::placeholder{color:var(--muted);-webkit-text-fill-color:var(--muted)}
+.field input:-webkit-autofill,.field input:-webkit-autofill:focus{
+  -webkit-box-shadow:0 0 0 1000px var(--card) inset !important;
+  -webkit-text-fill-color:var(--text) !important;
+}
+.field input::placeholder,.field textarea::placeholder{
+  color:var(--muted);-webkit-text-fill-color:var(--muted);
+}
 .field textarea{resize:none;min-height:84px;line-height:1.5}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 
 /* CHIPS */
 .chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{padding:11px 15px;background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);font-size:14px;font-weight:600;cursor:pointer;color:var(--muted);user-select:none;-webkit-user-select:none;min-height:44px;display:inline-flex;align-items:center;justify-content:center;touch-action:manipulation;transition:background-color .12s,border-color .12s,color .12s;-webkit-touch-callout:none}
-.chip:active{transform:scale(.95)}
+.chip{
+  padding:11px 15px;background:var(--card);border:1.5px solid var(--border);
+  border-radius:var(--rs);font-size:14px;font-weight:600;
+  cursor:pointer;color:var(--muted);
+  user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
+  min-height:44px;display:inline-flex;align-items:center;justify-content:center;
+  touch-action:manipulation;
+  transition:background-color .12s,border-color .12s,color .12s;
+}
 .chip.sel{background:rgba(0,196,244,.12);border-color:var(--accent);color:var(--accent)}
 .chip[data-opp="Alta"].sel{background:rgba(34,197,94,.15);border-color:var(--green);color:var(--green)}
 .chip[data-opp="Media"].sel{background:rgba(234,179,8,.15);border-color:var(--yellow);color:var(--yellow)}
 .chip[data-opp="Baja"].sel{background:rgba(249,115,22,.15);border-color:var(--orange);color:var(--orange)}
 .chip[data-opp="Nula"].sel{background:rgba(239,68,68,.15);border-color:var(--red);color:var(--red)}
-.yn{display:flex;gap:10px}.yn .chip{flex:1;font-size:16px;font-weight:700;padding:15px}
+.yn{display:flex;gap:10px}
+.yn .chip{flex:1;font-size:16px;font-weight:700;padding:15px}
 
-/* AXUM BOX */
-.axum-box{background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--rs);padding:14px;margin-top:4px}
+/* AXUM */
+.axum-box{
+  background:var(--bg3);border:1.5px solid var(--border);
+  border-radius:var(--rs);padding:14px;margin-top:4px;
+}
 .axum-lbl{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.7px;margin-bottom:12px}
 .axum-btns{display:flex;gap:10px}
-.axum-btn{flex:1;padding:13px 8px;border-radius:var(--rs);border:1.5px solid var(--border);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;background:var(--card);color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:52px;touch-action:manipulation;-webkit-appearance:none;transition:background-color .12s,border-color .12s,color .12s}
-.axum-btn:active{opacity:.7}
+.axum-btn{
+  flex:1;padding:13px 8px;border-radius:var(--rs);
+  border:1.5px solid var(--border);
+  font-size:13px;font-weight:700;cursor:pointer;
+  background:var(--card);color:var(--muted);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  min-height:52px;touch-action:manipulation;-webkit-appearance:none;
+  transition:background-color .12s,border-color .12s,color .12s;
+}
 .axum-ok.sel{background:rgba(34,197,94,.12);border-color:var(--green);color:var(--green)}
 .axum-fix.sel{background:rgba(239,68,68,.12);border-color:var(--red);color:var(--red)}
-/* Campo motivo: oculto por defecto, aparece al elegir Corregir */
 .axum-motivo{display:none;margin-top:12px}
 .axum-motivo.visible{display:block}
 
 /* NIVEL */
 .nivel-row{display:flex;gap:10px}
-.nchip{flex:1;padding:15px 8px;border-radius:var(--rs);border:2px solid var(--border);cursor:pointer;font-size:13px;font-weight:700;color:var(--muted);background:var(--card);min-height:62px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;touch-action:manipulation;transition:background-color .12s,border-color .12s,color .12s;-webkit-user-select:none}
-.nchip:active{opacity:.75}
+.nchip{
+  flex:1;padding:15px 8px;border-radius:var(--rs);
+  border:2px solid var(--border);cursor:pointer;
+  font-size:13px;font-weight:700;color:var(--muted);background:var(--card);
+  min-height:62px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:4px;
+  touch-action:manipulation;
+  transition:background-color .12s,border-color .12s,color .12s;
+  user-select:none;-webkit-user-select:none;
+}
 .nchip[data-n="alto"].sel{background:rgba(34,197,94,.15);border-color:var(--green);color:var(--green)}
 .nchip[data-n="medio"].sel{background:rgba(234,179,8,.15);border-color:var(--yellow);color:var(--yellow)}
 .nchip[data-n="bajo"].sel{background:rgba(239,68,68,.15);border-color:var(--red);color:var(--red)}
 
 .divider{height:1px;background:var(--border);margin:18px 0}
 
-/* BOTTOM NAV */
-.bnav{position:fixed;bottom:0;left:0;right:0;padding:10px 16px;padding-bottom:calc(10px + var(--sb));background:var(--bg);border-top:1px solid var(--border);display:flex;gap:10px;z-index:50}
-.btn{flex:1;padding:14px;border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;cursor:pointer;border:none;min-height:50px;touch-action:manipulation;-webkit-appearance:none;transition:opacity .12s}
-.btn:active{opacity:.72}
-.btn-back{background:var(--card);border:1.5px solid var(--border);color:var(--muted);max-width:88px}
+/* BOTONES */
+.bnav{
+  position:fixed;bottom:0;left:0;right:0;
+  padding:10px 16px;padding-bottom:calc(10px + var(--sb));
+  background:var(--bg);border-top:1px solid var(--border);
+  display:flex;gap:10px;z-index:50;
+}
+.btn{
+  flex:1;padding:15px;border-radius:var(--r);
+  font-size:16px !important;font-weight:700;
+  cursor:pointer;border:none;min-height:52px;
+  touch-action:manipulation;-webkit-appearance:none;appearance:none;
+}
+.btn-back{background:var(--card);border:1.5px solid var(--border);color:var(--muted);max-width:90px}
 .btn-next{background:var(--accent);color:#000}
 .btn-save{background:var(--green);color:#000;flex:2}
 
 /* TOAST */
-.toast{position:fixed;top:calc(64px + var(--st));left:50%;transform:translateX(-50%) translateY(-6px);padding:10px 20px;border-radius:28px;font-weight:700;font-size:14px;z-index:999;opacity:0;transition:opacity .22s,transform .22s;pointer-events:none;max-width:92vw;text-align:center;white-space:nowrap}
+.toast{
+  position:fixed;top:calc(64px + var(--st));left:50%;
+  transform:translateX(-50%) translateY(-6px);
+  padding:10px 20px;border-radius:28px;
+  font-weight:700;font-size:14px;z-index:999;
+  opacity:0;transition:opacity .22s,transform .22s;
+  pointer-events:none;max-width:92vw;text-align:center;
+}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .t-ok{background:var(--green);color:#000}
 .t-err{background:var(--red);color:#fff}
 .t-warn{background:var(--yellow);color:#000}
 
-/* LISTA */
-.lwrap{padding:16px}
-.lwrap h2{font-size:18px;font-weight:700;margin-bottom:3px}
-.lsub{font-size:13px;color:var(--muted);margin-bottom:14px}
-.frow-filters{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
-.frow-filters::-webkit-scrollbar{display:none}
-.fchip{padding:9px 15px;background:var(--card);border:1.5px solid var(--border);border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;color:var(--muted);flex-shrink:0;min-height:44px;display:flex;align-items:center;touch-action:manipulation;transition:background-color .12s,border-color .12s,color .12s}
-.fchip:active{opacity:.7}
-.fchip.on{border-color:var(--accent);color:var(--accent);background:rgba(0,196,244,.08)}
-.fchip.f-axum.on{border-color:var(--red);color:var(--red);background:rgba(239,68,68,.08)}
-.fchip.f-pend.on{border-color:var(--yellow);color:var(--yellow);background:rgba(234,179,8,.08)}
-
-/* CARDS */
-.ccard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:10px}
-.ccard:active{opacity:.75}
-.ctop{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
-.cname{font-size:15px;font-weight:700;letter-spacing:-.2px}
-.caddr{font-size:12px;color:var(--muted);margin-top:2px}
-.nbadge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;flex-shrink:0}
-.nb-alto{background:rgba(34,197,94,.15);color:var(--green)}
-.nb-medio{background:rgba(234,179,8,.15);color:var(--yellow)}
-.nb-bajo{background:rgba(239,68,68,.15);color:var(--red)}
-.nb-none{background:var(--bg3);color:var(--muted)}
-.ctags{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
-.tag{padding:3px 9px;background:var(--bg3);border-radius:6px;font-size:11px;color:var(--muted);font-weight:500}
-.tag-axum{background:rgba(239,68,68,.1);color:var(--red)}
-.tag-pend{background:rgba(234,179,8,.1);color:var(--yellow)}
-.tag-ex{background:rgba(0,196,244,.1);color:var(--accent)}
-.empty{text-align:center;padding:56px 20px;color:var(--muted);font-size:15px}
-.empty-i{font-size:38px;margin-bottom:10px}
-
-/* MODAL */
-
-
-
 /* INSTALL BANNER */
-.ibanner{background:rgba(0,196,244,.07);border:1px solid rgba(0,196,244,.18);border-radius:var(--rs);padding:9px 14px;margin:0 16px 10px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ibanner{
+  background:rgba(0,196,244,.07);border:1px solid rgba(0,196,244,.18);
+  border-radius:var(--rs);padding:9px 14px;
+  margin:0 16px 10px;display:flex;align-items:center;
+  justify-content:space-between;gap:10px;
+}
 .ibanner p{font-size:12px;color:var(--accent);font-weight:500;line-height:1.4}
-.iclose{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:4px 8px;min-height:36px;min-width:36px;display:flex;align-items:center;justify-content:center;touch-action:manipulation}
+.iclose{
+  background:none;border:none;color:var(--muted);
+  font-size:18px;cursor:pointer;padding:4px 8px;
+  min-height:36px;min-width:36px;
+  display:flex;align-items:center;justify-content:center;
+  touch-action:manipulation;
+}
 </style>
 </head>
 <body>
 
-<!-- CARGANDO -->
+<!-- LOADING -->
 <div class="loading" id="loading">
-  <div class="spinner"></div>
-  <p id="loading-txt">Cargando datos…</p>
+  <div class="spin"></div>
+  <p id="loading-txt">Iniciando…</p>
 </div>
 
 <!-- NAV -->
 <nav class="nav">
-  <div class="nav-logo">
-    <svg viewBox="0 0 28 28" fill="none">
-      <circle cx="14" cy="14" r="13" fill="#00C4F4" opacity=".15"/>
-      <circle cx="14" cy="14" r="7" fill="#00C4F4"/>
-      <path d="M8 14h12M14 8v12" stroke="#000" stroke-width="2" stroke-linecap="round"/>
-    </svg>
-    <div class="nav-title">PDV <span>PepsiCo</span></div>
-  </div>
-  <div class="nav-tabs">
-    <button class="nav-tab active" id="t-form" onclick="goTo('form-view')">Nuevo</button>
-    <button class="nav-tab" id="t-list" onclick="goTo('list-view')">Clientes</button>
-  </div>
+  <svg viewBox="0 0 28 28" fill="none">
+    <circle cx="14" cy="14" r="13" fill="#00C4F4" opacity=".15"/>
+    <circle cx="14" cy="14" r="7" fill="#00C4F4"/>
+    <path d="M8 14h12M14 8v12" stroke="#000" stroke-width="2" stroke-linecap="round"/>
+  </svg>
+  <div class="nav-title">PDV <span>PepsiCo</span></div>
 </nav>
 
-<!-- BARRA PROGRESO -->
-<div class="prog-bar" id="prog-bar">
-  <div class="prog-fill" id="prog" style="width:20%"></div>
-</div>
+<!-- PROGRESO -->
+<div class="prog"><div class="prog-fill" id="prog" style="width:20%"></div></div>
 
-<!-- BARRA SYNC -->
+<!-- SYNC BAR -->
 <div class="sbar s-load" id="sbar">
-  <div class="sleft">
-    <div class="sdot"></div>
-    <span id="slabel">Conectando…</span>
+  <div class="left">
+    <div class="dot"></div>
+    <span id="slabel">Iniciando…</span>
   </div>
-  <button class="reload-btn" onclick="reload()">↺ Actualizar</button>
+  <button class="rbtn" onclick="sincronizar()">↺ Sincronizar</button>
 </div>
 
 <!-- BANNER INSTALAR -->
 <div class="ibanner" id="ibanner" style="display:none">
   <p>📲 Agregá al inicio para usarla como app</p>
-  <button class="iclose" onclick="hideBanner()">✕</button>
+  <button class="iclose" onclick="ocultarBanner()">✕</button>
 </div>
 
-<!-- ═══════════════════════════════════════
-     VISTA: FORMULARIO
-════════════════════════════════════════ -->
-<div class="view active" id="form-view">
-<div class="fwrap">
+<!-- FORMULARIO -->
+<div class="form">
 
-<!-- PASO 1: BÁSICOS -->
+<!-- PASO 1 -->
 <div class="step active" id="s1">
-  <div class="sbadge">PASO 1 / 5</div>
-  <div class="stitle">Datos básicos</div>
-  <div class="ssub">Identificación del comercio</div>
+  <div class="badge">PASO 1 / 5</div>
+  <div class="title">Datos básicos</div>
+  <div class="sub">Identificación del comercio</div>
+
   <div class="field">
     <label>Nombre del comercio ✱</label>
-    <input type="text" id="f-nombre" placeholder="Ej: Kiosco La Esquina"
-      autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false">
+    <input type="text" id="f-nombre"
+      placeholder="Ej: Kiosco La Esquina"
+      autocomplete="off" autocorrect="off"
+      autocapitalize="words" spellcheck="false">
   </div>
   <div class="field">
     <label>Dirección ✱</label>
-    <input type="text" id="f-dir" placeholder="Ej: Av. Colón 1234, Nueva Córdoba"
-      autocomplete="off" autocorrect="off" autocapitalize="sentences">
+    <input type="text" id="f-dir"
+      placeholder="Ej: Av. Colón 1234, Nueva Córdoba"
+      autocomplete="off" autocorrect="off"
+      autocapitalize="sentences">
   </div>
   <div class="field">
     <label>Número de vendedor</label>
-    <input type="number" id="f-vendedor" placeholder="Ej: 42" inputmode="numeric" autocomplete="off">
+    <input type="number" id="f-vendedor"
+      placeholder="Ej: 42" inputmode="numeric"
+      autocomplete="off">
   </div>
   <div class="field">
     <label>Zona de visita ✱</label>
@@ -248,11 +293,12 @@ input,select,textarea,button{font-size:16px !important;font-family:'DM Sans',san
   </div>
 </div>
 
-<!-- PASO 2: CONTACTO + TIPO + AXUM -->
+<!-- PASO 2 -->
 <div class="step" id="s2">
-  <div class="sbadge">PASO 2 / 5</div>
-  <div class="stitle">Contacto y tipo</div>
-  <div class="ssub">Teléfonos, tipología y AXUM</div>
+  <div class="badge">PASO 2 / 5</div>
+  <div class="title">Contacto y tipo</div>
+  <div class="sub">Teléfonos, tipología y AXUM</div>
+
   <div class="frow">
     <div class="field">
       <label>Tel. dueño/encargado</label>
@@ -290,7 +336,6 @@ input,select,textarea,button{font-size:16px !important;font-family:'DM Sans',san
           <span style="font-size:11px;font-weight:400;opacity:.7">Hay que actualizar</span>
         </button>
       </div>
-      <!-- Campo motivo: solo visible al elegir "Corregir" -->
       <div class="axum-motivo" id="axum-motivo">
         <div class="field" style="margin-top:12px;margin-bottom:0">
           <label>Motivo de corrección</label>
@@ -303,11 +348,12 @@ input,select,textarea,button{font-size:16px !important;font-family:'DM Sans',san
   </div>
 </div>
 
-<!-- PASO 3: EJECUCIÓN -->
+<!-- PASO 3 -->
 <div class="step" id="s3">
-  <div class="sbadge">PASO 3 / 5</div>
-  <div class="stitle">Ejecución PDV</div>
-  <div class="ssub">Exhibidor y cumplimiento</div>
+  <div class="badge">PASO 3 / 5</div>
+  <div class="title">Ejecución PDV</div>
+  <div class="sub">Exhibidor y cumplimiento</div>
+
   <div class="field">
     <label>¿Tiene exhibidor PepsiCo?</label>
     <div class="yn chips">
@@ -353,11 +399,12 @@ input,select,textarea,button{font-size:16px !important;font-family:'DM Sans',san
   </div>
 </div>
 
-<!-- PASO 4: PORTAFOLIO -->
+<!-- PASO 4 -->
 <div class="step" id="s4">
-  <div class="sbadge">PASO 4 / 5</div>
-  <div class="stitle">Portafolio</div>
-  <div class="ssub">Marcas presentes en el local</div>
+  <div class="badge">PASO 4 / 5</div>
+  <div class="title">Portafolio</div>
+  <div class="sub">Marcas presentes en el local</div>
+
   <div class="field">
     <label>Cantidad de marcas PepsiCo</label>
     <div class="chips">
@@ -383,11 +430,12 @@ input,select,textarea,button{font-size:16px !important;font-family:'DM Sans',san
   </div>
 </div>
 
-<!-- PASO 5: OPORTUNIDADES -->
+<!-- PASO 5 -->
 <div class="step" id="s5">
-  <div class="sbadge">PASO 5 / 5</div>
-  <div class="stitle">Oportunidades</div>
-  <div class="ssub">Potencial y observaciones</div>
+  <div class="badge">PASO 5 / 5</div>
+  <div class="title">Oportunidades</div>
+  <div class="sub">Potencial y observaciones</div>
+
   <div class="field">
     <label>Posibilidad de exhibición adicional</label>
     <div class="chips">
@@ -399,7 +447,8 @@ input,select,textarea,button{font-size:16px !important;font-family:'DM Sans',san
   </div>
   <div class="field">
     <label>Producto de catálogo de interés</label>
-    <input type="text" id="f-producto" placeholder="Ej: Quaker granola, 3D's…"
+    <input type="text" id="f-producto"
+      placeholder="Ej: Quaker granola, 3D's…"
       autocomplete="off" autocorrect="off" autocapitalize="sentences">
   </div>
   <div class="field">
@@ -416,525 +465,337 @@ input,select,textarea,button{font-size:16px !important;font-family:'DM Sans',san
   </div>
 </div>
 
-</div><!-- /fwrap -->
+</div><!-- /form -->
 
 <!-- BOTONES FIJOS -->
 <div class="bnav" id="bnav">
-  <button type="button" class="btn btn-back" id="btn-back" onclick="prevStep()" style="display:none">← Atrás</button>
-  <button type="button" class="btn btn-next" id="btn-next" onclick="nextStep()">Siguiente →</button>
+  <button type="button" class="btn btn-back" id="btn-back" style="display:none" onclick="pasoAtras()">← Atrás</button>
+  <button type="button" class="btn btn-next" id="btn-next" onclick="pasoAdelante()">Siguiente →</button>
 </div>
-</div><!-- /form-view -->
-
-<!-- ═══════════════════════════════════════
-     VISTA: LISTA DE CLIENTES
-════════════════════════════════════════ -->
-<div class="view" id="list-view">
-<div class="lwrap">
-  <h2>Clientes relevados</h2>
-  <p class="lsub" id="lsub">0 clientes</p>
-  <div class="frow-filters">
-    <div class="fchip on" onclick="setFilter('todos',this)">Todos</div>
-    <div class="fchip f-axum" onclick="setFilter('axum',this)">⚠ AXUM</div>
-    <div class="fchip f-pend" onclick="setFilter('local',this)">⏳ Local</div>
-  </div>
-  <div id="list-content"></div>
-</div>
-</div>
-
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<!-- ═══════════════════════════════════════
-     JAVASCRIPT
-════════════════════════════════════════ -->
 <script>
 'use strict';
 
-/* ─── CONFIGURACIÓN ─────────────────────────────────────────
-   Reemplazar con la URL del Web App de Google Apps Script    */
-const URL_GAS = 'https://script.google.com/macros/s/AKfycbzbKUnBiXBnQjmN0QfkVzlcAmIG6md6nB36620Ct5EytdJPkaEcvK7fBlAEJLffiiJJ/exec';
+/* ── URL DEL WEB APP ─────────────────────────────────────── */
+const URL_GAS = 'https://script.google.com/macros/s/AKfycbzbKUnBiXBnQjmN0QfkVzlcAmIG6md6nB36620Ct5EytdJPkaEcvK7fBlAEJLffiiJJ/exec'; // ← reemplazar con tu URL
 
-/* ─── CLAVES DE ALMACENAMIENTO LOCAL ───────────────────────
-   v5 usa claves nuevas para evitar conflictos con versiones
-   anteriores que pudieran tener datos en otro formato       */
-const LS_DATA    = 'pdv_data_v5';
-const LS_PENDING = 'pdv_pend_v5';
-
-/* ─── ESTADO ────────────────────────────────────────────────
-   Una sola fuente de verdad: el array `clients`.
-   `pending` es la cola de lo que falta enviar a Sheets.     */
-let clients  = [];
-let pending  = [];
-let step     = 1;
-const STEPS  = 5;
-let filter   = 'todos';
-let axumVal  = '';
-let syncing  = false;
-
-/* ─── localStorage ──────────────────────────────────────────
-   Dos funciones simples. El try/catch es porque iOS en modo
-   privado lanza una excepción al intentar escribir.         */
+/* ── STORAGE ─────────────────────────────────────────────── */
+const LS_PEND = 'pdv_pend_v5';
 const lsGet = k => { try { return JSON.parse(localStorage.getItem(k)||'null'); } catch(e){ return null; }};
-const lsSet = (k,v) => { try { localStorage.setItem(k,JSON.stringify(v)); } catch(e){ /* iOS private mode */ }};
+const lsSet = (k,v) => { try { localStorage.setItem(k,JSON.stringify(v)); } catch(e){ } };
 
-/* ─── SYNC BAR ──────────────────────────────────────────────*/
+/* ── ESTADO ──────────────────────────────────────────────── */
+let pending  = lsGet(LS_PEND) || [];
+let paso     = 1;
+const PASOS  = 5;
+let axumVal  = '';
+let enviando = false;
+
+/* ── SYNC BAR ────────────────────────────────────────────── */
 function setSbar(cls, txt) {
   document.getElementById('sbar').className = 'sbar ' + cls;
   document.getElementById('slabel').textContent = txt;
 }
 
-/* ─── LOADING ───────────────────────────────────────────────*/
-const showLoad = t => { document.getElementById('loading-txt').textContent = t||'Cargando…'; document.getElementById('loading').classList.remove('off'); };
-const hideLoad = () => document.getElementById('loading').classList.add('off');
+/* ── LOADING ─────────────────────────────────────────────── */
+function showLoad(t) {
+  document.getElementById('loading-txt').textContent = t || 'Cargando…';
+  document.getElementById('loading').classList.remove('off');
+}
+function hideLoad() {
+  document.getElementById('loading').classList.add('off');
+}
 
-/* ─── LLAMADA A GOOGLE APPS SCRIPT ─────────────────────────
-   Usamos Content-Type: text/plain para evitar el "preflight"
-   CORS que bloquea las peticiones desde el navegador móvil.
-   Si la URL no está configurada, lanza error inmediatamente. */
-async function gas(body, ms=12000) {
+/* ── LLAMADA A APPS SCRIPT ───────────────────────────────── */
+async function gas(body, ms) {
+  ms = ms || 15000;
   if (URL_GAS === 'TU_URL_AQUI') throw new Error('URL no configurada');
-  const ctrl = new AbortController();
-  const t = setTimeout(()=>ctrl.abort(), ms);
+  var ctrl = new AbortController();
+  var timer = setTimeout(function(){ ctrl.abort(); }, ms);
   try {
-    const r = await fetch(URL_GAS, {
-      method:'POST',
-      headers:{'Content-Type':'text/plain'},
+    var r = await fetch(URL_GAS, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify(body),
       signal: ctrl.signal
     });
-    clearTimeout(t);
-    if (!r.ok) throw new Error('HTTP '+r.status);
+    clearTimeout(timer);
+    if (!r.ok) throw new Error('HTTP ' + r.status);
     return await r.json();
-  } catch(e) { clearTimeout(t); throw e; }
-}
-
-/* ─── INICIO DE LA APP ──────────────────────────────────────
-   Flujo:
-   1. Mostrar caché local de inmediato (no pantalla vacía)
-   2. Intentar leer desde Sheets (fuente de verdad)
-   3. Si falla: usar caché como fallback
-   4. Enviar pendientes acumulados                           */
-async function init() {
-  pending = lsGet(LS_PENDING) || [];
-  const cache = lsGet(LS_DATA) || [];
-
-  // Mostrar caché mientras carga para no ver pantalla en blanco
-  if (cache.length) {
-    clients = mergePending(cache, pending);
-    hideLoad();
-    setSbar('s-pend','Actualizando desde Sheets…');
-  }
-
-  if (URL_GAS === 'TU_URL_AQUI') {
-    clients = cache;
-    hideLoad();
-    setSbar('s-off','Solo local — configurar URL');
-    return;
-  }
-
-  if (!navigator.onLine) {
-    clients = mergePending(cache, pending);
-    hideLoad();
-    setSbar('s-off',`Sin conexión — ${clients.length} en caché`);
-    return;
-  }
-
-  try {
-    // Primero vaciar pendientes, luego leer el estado real
-    if (pending.length) await flush(false);
-
-    const r = await gas({ action:'getAll' });
-    if (r.status !== 'ok') throw new Error(r.message);
-
-    // Sheets respondió: reemplazar clients con datos reales
-    clients = mergePending(r.data||[], pending);
-    lsSet(LS_DATA, clients.filter(c=>c.synced));
-    hideLoad();
-    setSbar('s-ok',`${clients.length} registros · Sincronizado ✓`);
   } catch(e) {
-    clients = mergePending(cache, pending);
-    hideLoad();
-    setSbar('s-err',`Error al conectar — usando caché (${clients.length})`);
+    clearTimeout(timer);
+    throw e;
   }
 }
 
-/* Fusiona datos de Sheets con pendientes locales sin duplicar.
-   También normaliza el campo `marcas` (siempre debe ser array). */
-function mergePending(base, pend) {
-  const map = new Map();
-  base.forEach(c => map.set(c.syncId, fixMarcas(c)));
-  pend.forEach(c => { if (!map.has(c.syncId)) map.set(c.syncId, {...fixMarcas(c), synced:false}); });
-  return Array.from(map.values());
+/* ── INIT ────────────────────────────────────────────────── */
+function init() {
+  // Mostrar estado inicial de sync
+  if (URL_GAS === 'TU_URL_AQUI') {
+    setSbar('s-off', 'URL no configurada — modo local');
+  } else if (pending.length > 0) {
+    setSbar('s-pend', pending.length + ' registro(s) pendiente(s)');
+    // Intentar enviar pendientes al abrir
+    setTimeout(function(){ enviarPendientes(true); }, 2000);
+  } else {
+    setSbar('s-ok', 'Listo para relevar');
+  }
+  hideLoad();
 }
 
-/* Sheets guarda marcas como string "Lay's, Doritos".
-   La app necesita un array. Esta función lo convierte. */
-function fixMarcas(c) {
-  if (typeof c.marcas === 'string') {
-    c.marcas = c.marcas.trim() ? c.marcas.split(',').map(m=>m.trim()).filter(Boolean) : [];
-  } else if (!Array.isArray(c.marcas)) {
-    c.marcas = [];
-  }
-  return c;
-}
-
-/* ─── FLUSH — enviar pendientes a Sheets ───────────────────
-   Recorre la cola uno por uno. Si falla alguno, lo deja
-   en la cola para el próximo intento.                       */
-async function flush(ui=true) {
-  if (syncing || !pending.length) {
-    if (ui && !pending.length) setSbar('s-ok',`${clients.length} registros · Sincronizado ✓`);
-    return;
-  }
+/* ── ENVIAR PENDIENTES ───────────────────────────────────── */
+async function enviarPendientes(mostrarBarra) {
+  if (enviando || pending.length === 0) return;
   if (!navigator.onLine || URL_GAS === 'TU_URL_AQUI') return;
 
-  syncing = true;
-  if (ui) setSbar('s-pend',`Sincronizando ${pending.length} pendiente(s)…`);
+  enviando = true;
+  if (mostrarBarra) setSbar('s-pend', 'Sincronizando ' + pending.length + ' pendiente(s)…');
 
-  const failed = [];
-  for (const rec of [...pending]) {
+  var fallidos = [];
+  for (var i = 0; i < pending.length; i++) {
+    var rec = pending[i];
     try {
-      const r = await gas({ action:'add', data:rec });
-      if (r.status==='ok' || r.status==='duplicate') {
-        // Marcar como sincronizado en clients
-        const idx = clients.findIndex(c=>c.syncId===rec.syncId);
-        if (idx!==-1) clients[idx].synced = true;
-        pending = pending.filter(p=>p.syncId!==rec.syncId);
-      } else {
-        failed.push(rec);
+      var r = await gas({ action: 'add', data: rec });
+      if (r.status !== 'ok' && r.status !== 'duplicate') {
+        fallidos.push(rec);
       }
-    } catch(e) { failed.push(rec); }
+    } catch(e) {
+      fallidos.push(rec);
+    }
   }
 
-  pending = failed;
-  lsSet(LS_PENDING, pending);
-  lsSet(LS_DATA, clients.filter(c=>c.synced));
-  syncing = false;
+  pending = fallidos;
+  lsSet(LS_PEND, pending);
+  enviando = false;
 
-  if (ui) {
-    if (pending.length) {
-      setSbar('s-err',`${pending.length} sin sincronizar — reintentando en 30s`);
-      setTimeout(()=>flush(true), 30000);
-    } else {
-      setSbar('s-ok',`${clients.length} registros · Sincronizado ✓`);
-    }
+  if (pending.length === 0) {
+    setSbar('s-ok', 'Todo sincronizado ✓');
+  } else {
+    setSbar('s-err', pending.length + ' sin sincronizar — reintentando en 30s');
+    setTimeout(function(){ enviarPendientes(true); }, 30000);
   }
 }
 
-/* ─── RECARGA MANUAL ────────────────────────────────────────*/
-async function reload() {
-  if (!navigator.onLine) { toast('Sin conexión','warn'); return; }
-  if (URL_GAS === 'TU_URL_AQUI') { toast('URL no configurada','warn'); return; }
-  showLoad('Actualizando desde Sheets…');
-  setSbar('s-load','Actualizando…');
-  try {
-    if (pending.length) await flush(false);
-    const r = await gas({ action:'getAll' });
-    if (r.status!=='ok') throw new Error(r.message);
-    clients = mergePending(r.data||[], pending);
-    lsSet(LS_DATA, clients.filter(c=>c.synced));
-    setSbar('s-ok',`${clients.length} registros · Actualizado ✓`);
-    toast(`✓ ${clients.length} registros cargados`,'ok');
-  } catch(e) {
-    setSbar('s-err','Error al actualizar');
-    toast('Error al conectar con Sheets','err');
-  } finally {
-    hideLoad();
-    refreshView();
-  }
+/* ── SINCRONIZAR MANUAL ──────────────────────────────────── */
+async function sincronizar() {
+  if (!navigator.onLine) { toast('Sin conexión', 'warn'); return; }
+  if (URL_GAS === 'TU_URL_AQUI') { toast('URL no configurada', 'warn'); return; }
+  await enviarPendientes(true);
 }
 
-/* ─── EVENTOS DE CONEXIÓN ───────────────────────────────────*/
-window.addEventListener('online', async () => {
-  setSbar('s-pend','Conexión restaurada…');
-  await flush(true);
-  try {
-    const r = await gas({ action:'getAll' });
-    if (r.status==='ok') {
-      clients = mergePending(r.data||[], pending);
-      lsSet(LS_DATA, clients.filter(c=>c.synced));
-      setSbar('s-ok',`${clients.length} registros · Sincronizado ✓`);
-      refreshView();
-    }
-  } catch(e) {}
+/* ── ONLINE/OFFLINE ──────────────────────────────────────── */
+window.addEventListener('online', function() {
+  setSbar('s-pend', 'Conexión restaurada — sincronizando…');
+  setTimeout(function(){ enviarPendientes(true); }, 1500);
 });
-window.addEventListener('offline', () => {
-  setSbar('s-off',`Sin conexión — ${pending.length} pendiente(s)`);
+window.addEventListener('offline', function() {
+  setSbar('s-off', 'Sin conexión — ' + pending.length + ' pendiente(s)');
 });
 
-/* ─── BANNER INSTALACIÓN ────────────────────────────────────*/
-function hideBanner() { document.getElementById('ibanner').style.display='none'; lsSet('no_banner',1); }
-if ((/iphone|ipad|ipod|android/i.test(navigator.userAgent))
+/* ── BANNER INSTALACIÓN ──────────────────────────────────── */
+function ocultarBanner() {
+  document.getElementById('ibanner').style.display = 'none';
+  lsSet('no_banner', 1);
+}
+if (/iphone|ipad|ipod|android/i.test(navigator.userAgent)
   && !window.matchMedia('(display-mode:standalone)').matches
   && !window.navigator.standalone
   && !lsGet('no_banner')) {
   document.getElementById('ibanner').style.display = 'flex';
 }
 
-/* ─── CHIPS ─────────────────────────────────────────────────
-   Un solo listener en document, más estable en iOS que
-   listener por elemento. `closest` encuentra el chip
-   aunque el tap caiga en un hijo del chip.                  */
-document.addEventListener('click', e => {
-  // Chips del formulario
-  const chip = e.target.closest('.chip[data-g]');
-  if (chip && chip.closest('#form-view')) {
-    e.preventDefault();
-    const g = chip.dataset.g;
-    if (!chip.classList.contains('multi')) {
-      document.querySelectorAll(`.chip[data-g="${g}"]`).forEach(c=>c.classList.remove('sel'));
-    }
-    chip.classList.toggle('sel');
-    // Mostrar/ocultar sección de tipo de exhibidor
-    if (g==='exhibidor') {
-      const si = document.querySelector('.chip[data-g="exhibidor"][data-v="Sí"]')?.classList.contains('sel');
-      document.getElementById('exhib-extra').style.display = si ? 'block' : 'none';
-      if (!si) document.querySelectorAll('.chip[data-g="tipo-exhib"],.chip[data-g="exhib-ok"]').forEach(c=>c.classList.remove('sel'));
-    }
+/* ── CHIPS ───────────────────────────────────────────────── */
+document.addEventListener('click', function(e) {
+  var chip = e.target.closest('.chip[data-g]');
+  if (!chip) return;
+  e.preventDefault();
+  var g = chip.dataset.g;
+  var multi = chip.classList.contains('multi');
+  if (!multi) {
+    document.querySelectorAll('.chip[data-g="' + g + '"]').forEach(function(c){ c.classList.remove('sel'); });
   }
-  // Chips de nivel
-  const nchip = e.target.closest('.nchip');
-  if (nchip) {
-    document.querySelectorAll('.nchip').forEach(c=>c.classList.remove('sel'));
-    nchip.classList.add('sel');
+  chip.classList.toggle('sel');
+  if (g === 'exhibidor') {
+    var si = document.querySelector('.chip[data-g="exhibidor"][data-v="Sí"]');
+    var tiene = si && si.classList.contains('sel');
+    document.getElementById('exhib-extra').style.display = tiene ? 'block' : 'none';
+    if (!tiene) {
+      document.querySelectorAll('.chip[data-g="tipo-exhib"],.chip[data-g="exhib-ok"]').forEach(function(c){ c.classList.remove('sel'); });
+    }
   }
 });
 
-/* ─── AXUM ──────────────────────────────────────────────────*/
+document.addEventListener('click', function(e) {
+  var nchip = e.target.closest('.nchip');
+  if (!nchip) return;
+  document.querySelectorAll('.nchip').forEach(function(c){ c.classList.remove('sel'); });
+  nchip.classList.add('sel');
+});
+
+/* ── AXUM ────────────────────────────────────────────────── */
 function setAxum(val) {
   axumVal = val;
-  document.getElementById('axum-ok').classList.toggle('sel', val==='ok');
-  document.getElementById('axum-fix').classList.toggle('sel', val==='corregir');
-  // Mostrar campo motivo solo si elige Corregir
-  document.getElementById('axum-motivo').classList.toggle('visible', val==='corregir');
+  document.getElementById('axum-ok').classList.toggle('sel', val === 'ok');
+  document.getElementById('axum-fix').classList.toggle('sel', val === 'corregir');
+  document.getElementById('axum-motivo').classList.toggle('visible', val === 'corregir');
   if (val !== 'corregir') document.getElementById('f-axum-motivo').value = '';
 }
 
-/* ─── PASOS DEL FORMULARIO ──────────────────────────────────*/
-function setStep(n) {
-  document.querySelectorAll('.step').forEach((s,i)=>s.classList.toggle('active',i===n-1));
-  step = n;
-  document.getElementById('prog').style.width = (n/STEPS*100)+'%';
-  document.getElementById('btn-back').style.display = n>1 ? '' : 'none';
-  const btn = document.getElementById('btn-next');
-  if (n===STEPS) {
-    btn.textContent='💾 Guardar cliente';
-    btn.className='btn btn-save';
-    btn.setAttribute('onclick','save()');
-  } else {
-    btn.textContent='Siguiente →';
-    btn.className='btn btn-next';
-    btn.setAttribute('onclick','nextStep()');
-  }
-  window.scrollTo(0,0);
-  document.documentElement.scrollTop=0;
-  document.body.scrollTop=0;
-}
-function nextStep() { if(validate()) setStep(step+1); }
-function prevStep() { if(step>1) setStep(step-1); }
+/* ── PASOS ───────────────────────────────────────────────── */
+function irAPaso(n) {
+  document.querySelectorAll('.step').forEach(function(s, i){
+    s.classList.toggle('active', i === n - 1);
+  });
+  paso = n;
+  document.getElementById('prog').style.width = (n / PASOS * 100) + '%';
+  document.getElementById('btn-back').style.display = n > 1 ? '' : 'none';
 
-function validate() {
-  if (step===1) {
-    if (!v('f-nombre')) { toast('⚠ Ingresá el nombre','warn'); return false; }
-    if (!v('f-dir'))    { toast('⚠ Ingresá la dirección','warn'); return false; }
-    if (!chip('zona'))  { toast('⚠ Seleccioná la zona','warn'); return false; }
+  var btn = document.getElementById('btn-next');
+  if (n === PASOS) {
+    btn.textContent = '💾 Guardar cliente';
+    btn.className = 'btn btn-save';
+  } else {
+    btn.textContent = 'Siguiente →';
+    btn.className = 'btn btn-next';
   }
-  if (step===2) {
-    if (!chip('tipo'))  { toast('⚠ Seleccioná la tipología','warn'); return false; }
+  window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+}
+
+function pasoAdelante() {
+  if (paso === PASOS) {
+    guardar();
+  } else if (validar()) {
+    irAPaso(paso + 1);
+  }
+}
+
+function pasoAtras() {
+  if (paso > 1) irAPaso(paso - 1);
+}
+
+function validar() {
+  if (paso === 1) {
+    if (!val('f-nombre')) { toast('⚠ Ingresá el nombre', 'warn'); return false; }
+    if (!val('f-dir'))    { toast('⚠ Ingresá la dirección', 'warn'); return false; }
+    if (!chip('zona'))    { toast('⚠ Seleccioná la zona', 'warn'); return false; }
+  }
+  if (paso === 2) {
+    if (!chip('tipo')) { toast('⚠ Seleccioná la tipología', 'warn'); return false; }
   }
   return true;
 }
 
-/* Helpers para leer valores del formulario */
-const v     = id  => document.getElementById(id)?.value.trim() || '';
-const chip  = g   => document.querySelector(`.chip[data-g="${g}"].sel`)?.dataset.v || '';
-const chips = g   => [...document.querySelectorAll(`.chip[data-g="${g}"].sel`)].map(c=>c.dataset.v);
-const nivel = ()  => document.querySelector('.nchip.sel')?.dataset.n || '';
+/* ── HELPERS FORM ────────────────────────────────────────── */
+function val(id) {
+  var el = document.getElementById(id);
+  return el ? el.value.trim() : '';
+}
+function chip(g) {
+  var el = document.querySelector('.chip[data-g="' + g + '"].sel');
+  return el ? el.dataset.v : '';
+}
+function chips(g) {
+  return Array.from(document.querySelectorAll('.chip[data-g="' + g + '"].sel')).map(function(c){ return c.dataset.v; });
+}
+function nivel() {
+  var el = document.querySelector('.nchip.sel');
+  return el ? el.dataset.n : '';
+}
 
-/* ─── GUARDAR CLIENTE ───────────────────────────────────────
-   Flujo:
-   1. Construir objeto con todos los datos del formulario
-   2. Verificar duplicado (mismo nombre + dirección < 4hs)
-   3. Guardar local inmediatamente (el usuario ve confirmación)
-   4. Intentar enviar a Sheets (si hay conexión)
-   5. Si falla: queda en cola, se reintenta solo              */
-async function save() {
-  const nombre = v('f-nombre');
-  if (!nombre) { toast('⚠ Falta el nombre','warn'); return; }
+/* ── GUARDAR ─────────────────────────────────────────────── */
+async function guardar() {
+  var nombre = val('f-nombre');
+  if (!nombre) { toast('⚠ Falta el nombre', 'warn'); return; }
 
-  const now    = new Date();
-  const syncId = 'pdv_' + now.getTime() + '_' + Math.random().toString(36).slice(2,6);
+  var ahora  = new Date();
+  var syncId = 'pdv_' + ahora.getTime() + '_' + Math.random().toString(36).slice(2, 6);
 
-  const rec = {
-    syncId,
-    fecha:    now.toLocaleDateString('es-AR'),
-    hora:     now.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'}),
-    nombre,
-    dir:      v('f-dir'),
-    nroVendedor: v('f-vendedor'),
-    zona:     chip('zona'),
-    tel1:     v('f-tel1'),
-    tel2:     v('f-tel2'),
-    tipo:     chip('tipo'),
-    axum:     axumVal,
-    axumMotivo: axumVal==='corregir' ? v('f-axum-motivo') : '',
-    exhibidor:  chip('exhibidor'),
-    tipoExhib:  chip('tipo-exhib'),
-    exhibOk:    chip('exhib-ok'),
-    precios:    chip('precios'),
-    planograma: chip('planograma'),
-    cantMarcas: chip('cant-marcas'),
-    marcas:     chips('marcas'),
-    opp:        chip('opp'),
-    producto:   v('f-producto'),
-    nivel:      nivel(),
-    obs:        v('f-obs'),
-    synced:     false,
+  var rec = {
+    syncId:      syncId,
+    fecha:       ahora.toLocaleDateString('es-AR'),
+    hora:        ahora.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }),
+    nombre:      nombre,
+    dir:         val('f-dir'),
+    nroVendedor: val('f-vendedor'),
+    zona:        chip('zona'),
+    tel1:        val('f-tel1'),
+    tel2:        val('f-tel2'),
+    tipo:        chip('tipo'),
+    axum:        axumVal,
+    axumMotivo:  axumVal === 'corregir' ? val('f-axum-motivo') : '',
+    exhibidor:   chip('exhibidor'),
+    tipoExhib:   chip('tipo-exhib'),
+    exhibOk:     chip('exhib-ok'),
+    precios:     chip('precios'),
+    planograma:  chip('planograma'),
+    cantMarcas:  chip('cant-marcas'),
+    marcas:      chips('marcas'),
+    opp:         chip('opp'),
+    producto:    val('f-producto'),
+    nivel:       nivel(),
+    obs:         val('f-obs'),
   };
 
-  // Detectar duplicado: mismo nombre + dirección en las últimas 4 horas
-  const ya = clients.find(c =>
-    c.nombre.toLowerCase()===rec.nombre.toLowerCase() &&
-    c.dir.toLowerCase()===rec.dir.toLowerCase() &&
-    (now.getTime() - parseInt(c.syncId.split('_')[1]||0)) < 14400000
-  );
-  if (ya) { toast('⚠ Este cliente ya fue relevado hoy','warn'); return; }
-
-  // Guardar localmente de inmediato
-  clients.push(rec);
+  // Guardar en local primero — nunca se pierde
   pending.push(rec);
-  lsSet(LS_PENDING, pending);
-  lsSet(LS_DATA, clients.filter(c=>c.synced));
-
-  toast('✓ ' + rec.nombre + ' guardado','ok');
-  resetForm();
+  lsSet(LS_PEND, pending);
+  toast('✓ ' + rec.nombre + ' guardado', 'ok');
+  resetear();
 
   // Enviar a Sheets
   if (navigator.onLine && URL_GAS !== 'TU_URL_AQUI') {
-    setSbar('s-pend','Guardando en Sheets…');
+    setSbar('s-pend', 'Guardando en Sheets…');
     try {
-      const r = await gas({ action:'add', data:rec });
-      if (r.status==='ok' || r.status==='duplicate') {
-        const i = clients.findIndex(c=>c.syncId===rec.syncId);
-        if (i!==-1) clients[i].synced = true;
-        pending = pending.filter(p=>p.syncId!==rec.syncId);
-        lsSet(LS_PENDING, pending);
-        lsSet(LS_DATA, clients.filter(c=>c.synced));
-        setSbar('s-ok',`${clients.length} registros · Sincronizado ✓`);
-      } else throw new Error(r.message);
+      var r = await gas({ action: 'add', data: rec });
+      if (r.status === 'ok' || r.status === 'duplicate') {
+        pending = pending.filter(function(p){ return p.syncId !== rec.syncId; });
+        lsSet(LS_PEND, pending);
+        setSbar('s-ok', 'Guardado en Sheets ✓ — ' + pending.length + ' pendiente(s)');
+      } else {
+        throw new Error(r.message);
+      }
     } catch(e) {
-      setSbar('s-err','Error al guardar en Sheets — queda en cola');
-      setTimeout(()=>flush(true), 30000);
+      setSbar('s-err', 'Error al enviar — guardado local, reintentando');
+      setTimeout(function(){ enviarPendientes(true); }, 30000);
     }
-  } else if (!navigator.onLine) {
-    setSbar('s-off',`Sin conexión — ${pending.length} pendiente(s)`);
+  } else {
+    setSbar('s-off', 'Sin conexión — ' + pending.length + ' pendiente(s) local(es)');
   }
 }
 
-/* ─── RESET ─────────────────────────────────────────────────*/
-function resetForm() {
-  document.querySelectorAll('#form-view input,#form-view textarea').forEach(el=>el.value='');
-  document.querySelectorAll('#form-view .chip').forEach(c=>c.classList.remove('sel'));
-  document.querySelectorAll('.nchip').forEach(c=>c.classList.remove('sel'));
-  document.getElementById('exhib-extra').style.display='none';
+/* ── RESETEAR FORMULARIO ─────────────────────────────────── */
+function resetear() {
+  document.querySelectorAll('.form input, .form textarea').forEach(function(el){ el.value = ''; });
+  document.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('sel'); });
+  document.querySelectorAll('.nchip').forEach(function(c){ c.classList.remove('sel'); });
+  document.getElementById('exhib-extra').style.display = 'none';
   document.getElementById('axum-motivo').classList.remove('visible');
-  axumVal='';
+  axumVal = '';
   document.getElementById('axum-ok').classList.remove('sel');
   document.getElementById('axum-fix').classList.remove('sel');
-  setStep(1);
+  irAPaso(1);
 }
 
-/* ─── TOAST ─────────────────────────────────────────────────*/
-let toastT;
-function toast(msg, tipo='ok') {
-  const el = document.getElementById('toast');
-  el.textContent=msg;
-  el.className='toast t-'+tipo;
-  void el.offsetWidth; // forzar reflow para reiniciar animación CSS
+/* ── TOAST ───────────────────────────────────────────────── */
+var toastTimer;
+function toast(msg, tipo) {
+  tipo = tipo || 'ok';
+  var el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast t-' + tipo;
+  void el.offsetWidth;
   el.classList.add('show');
-  clearTimeout(toastT);
-  toastT = setTimeout(()=>el.classList.remove('show'), 2600);
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ el.classList.remove('show'); }, 2600);
 }
 
-/* ─── VISTAS ────────────────────────────────────────────────*/
-function goTo(id) {
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.getElementById('t-form').classList.toggle('active', id==='form-view');
-  document.getElementById('t-list').classList.toggle('active', id==='list-view');
-  const isForm = id==='form-view';
-  document.getElementById('bnav').style.display     = isForm ? 'flex' : 'none';
-  document.getElementById('prog-bar').style.display = isForm ? 'block' : 'none';
-  if (id==='list-view') renderList();
-  window.scrollTo(0,0);
-  document.documentElement.scrollTop=0;
-}
-
-function refreshView() {
-  if (document.getElementById('list-view').classList.contains('active')) renderList();
-}
-
-/* ─── LISTA DE CLIENTES ─────────────────────────────────────
-   Solo 3 filtros simples: Todos / AXUM a corregir / Local    */
-function setFilter(f, el) {
-  filter = f;
-  document.querySelectorAll('.fchip').forEach(c=>c.classList.remove('on'));
-  el.classList.add('on');
-  renderList();
-}
-
-function renderList() {
-  let f = clients;
-  if (filter==='axum')  f = clients.filter(c=>c.axum==='corregir');
-  if (filter==='local') f = clients.filter(c=>!c.synced);
-
-  document.getElementById('lsub').textContent = f.length + ' cliente' + (f.length!==1?'s':'');
-
-  if (!f.length) {
-    document.getElementById('list-content').innerHTML =
-      '<div class="empty"><div class="empty-i">🔍</div>Sin resultados</div>';
-    return;
-  }
-
-  const nL = {alto:'🟢 Alto', medio:'🟡 Medio', bajo:'🔴 Bajo'};
-  const nC = {alto:'nb-alto', medio:'nb-medio', bajo:'nb-bajo'};
-
-  document.getElementById('list-content').innerHTML = f.slice().reverse().map(c => {
-    const tags = [];
-    if (c.tipo) tags.push(`<span class="tag">${x(c.tipo)}</span>`);
-    if (c.exhibidor==='Sí') tags.push(`<span class="tag tag-ex">Exhibidor ✓</span>`);
-    if (c.exhibidor==='No') tags.push(`<span class="tag">Sin exhibidor</span>`);
-    if (c.axum==='corregir') tags.push(`<span class="tag tag-axum">⚠ AXUM</span>`);
-    if (c.zona) tags.push(`<span class="tag">${x(c.zona)}</span>`);
-    if (!c.synced) tags.push(`<span class="tag tag-pend">⏳ Local</span>`);
-    return `<div class="ccard">
-      <div class="ctop">
-        <div>
-          <div class="cname">${x(c.nombre)}</div>
-          <div class="caddr">${x(c.dir)}</div>
-        </div>
-        <div class="nbadge ${nC[c.nivel]||'nb-none'}">${nL[c.nivel]||'—'}</div>
-      </div>
-      <div class="ctags">${tags.join('')}<span class="tag" style="margin-left:auto">${x(c.fecha||'')}</span></div>
-    </div>`;
-  }).join('');
-}
-
-/* ─── ESCAPE HTML ───────────────────────────────────────────
-   Evita XSS al insertar datos del usuario en innerHTML.     */
-function x(s) {
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-/* ─── ARRANQUE ──────────────────────────────────────────────*/
-document.getElementById('bnav').style.display = 'flex';
-
-(async () => {
-  showLoad('Cargando datos desde Google Sheets…');
-  await init();
-  refreshView();
-})();
+/* ── ARRANQUE ────────────────────────────────────────────── */
+init();
 </script>
 </body>
 </html>
