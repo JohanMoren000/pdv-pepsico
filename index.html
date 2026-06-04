@@ -139,7 +139,7 @@ input,select,textarea,button{font-size:16px !important;font-family:'DM Sans',san
 .fchip.f-pend.on{border-color:var(--yellow);color:var(--yellow);background:rgba(234,179,8,.08)}
 
 /* CARDS */
-.ccard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:10px;cursor:pointer;touch-action:manipulation}
+.ccard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:10px}
 .ccard:active{opacity:.75}
 .ctop{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
 .cname{font-size:15px;font-weight:700;letter-spacing:-.2px}
@@ -721,11 +721,11 @@ function setStep(n) {
   if (n===STEPS) {
     btn.textContent='💾 Guardar cliente';
     btn.className='btn btn-save';
-    btn.onclick=save;
+    btn.setAttribute('onclick','save()');
   } else {
     btn.textContent='Siguiente →';
     btn.className='btn btn-next';
-    btn.onclick=nextStep;
+    btn.setAttribute('onclick','nextStep()');
   }
   window.scrollTo(0,0);
   document.documentElement.scrollTop=0;
