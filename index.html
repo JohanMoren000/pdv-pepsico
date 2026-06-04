@@ -158,18 +158,8 @@ input,select,textarea,button{font-size:16px !important;font-family:'DM Sans',san
 .empty-i{font-size:38px;margin-bottom:10px}
 
 /* MODAL */
-.moverlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:none;align-items:flex-end}
-.moverlay.open{display:flex}
-.modal{background:var(--bg2);border-radius:20px 20px 0 0;width:100%;max-height:88vh;overflow-y:auto;padding:20px;padding-bottom:calc(20px + var(--sb));border-top:1px solid var(--border);-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
-.mhandle{width:38px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px}
-.mname{font-size:18px;font-weight:700}
-.maddr{font-size:13px;color:var(--muted);margin:3px 0 14px}
-.mrow{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border)}
-.mrow:last-of-type{border:none}
-.mkey{font-size:13px;color:var(--muted);font-weight:500;flex-shrink:0;margin-right:10px}
-.mval{font-size:13px;font-weight:600;text-align:right;color:var(--text);max-width:65%;word-break:break-word}
-.mclose{width:100%;padding:15px;background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;margin-top:14px;cursor:pointer;min-height:50px;touch-action:manipulation;-webkit-appearance:none}
-.mclose:active{opacity:.7}
+
+
 
 /* INSTALL BANNER */
 .ibanner{background:rgba(0,196,244,.07);border:1px solid rgba(0,196,244,.18);border-radius:var(--rs);padding:9px 14px;margin:0 16px 10px;display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -241,6 +231,10 @@ input,select,textarea,button{font-size:16px !important;font-family:'DM Sans',san
     <label>Dirección ✱</label>
     <input type="text" id="f-dir" placeholder="Ej: Av. Colón 1234, Nueva Córdoba"
       autocomplete="off" autocorrect="off" autocapitalize="sentences">
+  </div>
+  <div class="field">
+    <label>Número de vendedor</label>
+    <input type="number" id="f-vendedor" placeholder="Ej: 42" inputmode="numeric" autocomplete="off">
   </div>
   <div class="field">
     <label>Zona de visita ✱</label>
@@ -447,14 +441,6 @@ input,select,textarea,button{font-size:16px !important;font-family:'DM Sans',san
 </div>
 </div>
 
-<!-- MODAL -->
-<div class="moverlay" id="moverlay">
-  <div class="modal">
-    <div class="mhandle"></div>
-    <div id="mbody"></div>
-    <button type="button" class="mclose" onclick="closeModal()">Cerrar</button>
-  </div>
-</div>
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
@@ -786,6 +772,7 @@ async function save() {
     hora:     now.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'}),
     nombre,
     dir:      v('f-dir'),
+    nroVendedor: v('f-vendedor'),
     zona:     chip('zona'),
     tel1:     v('f-tel1'),
     tel2:     v('f-tel2'),
@@ -921,7 +908,7 @@ function renderList() {
     if (c.axum==='corregir') tags.push(`<span class="tag tag-axum">⚠ AXUM</span>`);
     if (c.zona) tags.push(`<span class="tag">${x(c.zona)}</span>`);
     if (!c.synced) tags.push(`<span class="tag tag-pend">⏳ Local</span>`);
-    return `<div class="ccard" onclick="openModal('${x(c.syncId)}')">
+    return `<div class="ccard">
       <div class="ctop">
         <div>
           <div class="cname">${x(c.nombre)}</div>
@@ -932,107 +919,6 @@ function renderList() {
       <div class="ctags">${tags.join('')}<span class="tag" style="margin-left:auto">${x(c.fecha||'')}</span></div>
     </div>`;
   }).join('');
-}
-
-/* ─── MODAL ─────────────────────────────────────────────────*/
-function openModal(syncId) {
-  const c = clients.find(cl=>cl.syncId===syncId);
-  if (!c) return;
-
-  const axumTexto = {ok:'✓ Refleja bien', corregir:'⚠ Corregir', '':'—'};
-  const axumColor = {ok:'var(--green)', corregir:'var(--red)', '':'var(--muted)'};
-  const nL = {alto:'🟢 Alto', medio:'🟡 Medio', bajo:'🔴 Bajo'};
-
-  const filas = [
-    ['Zona',          c.zona],
-    ['Tipología',     c.tipo],
-    ['Tel. dueño',    c.tel1 ? `<a href="tel:${x(c.tel1)}" style="color:var(--accent)">${x(c.tel1)}</a>` : ''],
-    ['Tel. empleado', c.tel2 ? `<a href="tel:${x(c.tel2)}" style="color:var(--accent)">${x(c.tel2)}</a>` : ''],
-    ['AXUM',          `<span style="color:${axumColor[c.axum||'']}">${axumTexto[c.axum||'']}</span>`],
-    ['Motivo AXUM',   c.axumMotivo],
-    ['Exhibidor',     c.exhibidor],
-    ['Tipo exhibidor',c.tipoExhib],
-    ['Exhibidor OK',  c.exhibOk],
-    ['Precios',       c.precios],
-    ['Planograma',    c.planograma],
-    ['Cant. marcas',  c.cantMarcas],
-    ['Marcas',        Array.isArray(c.marcas) ? c.marcas.join(', ') : c.marcas],
-    ['Opp. exhibición',c.opp],
-    ['Producto interés',c.producto],
-    ['Observación',   c.obs],
-    ['Estado',        c.synced
-      ? '<span style="color:var(--green)">✓ En Sheets</span>'
-      : '<span style="color:var(--yellow)">⏳ Solo local</span>'],
-    ['Fecha / Hora',  (c.fecha||'') + (c.hora ? ' '+c.hora : '')],
-  ].filter(([,val])=>val).map(([k,val])=>
-    `<div class="mrow"><span class="mkey">${k}</span><span class="mval">${val}</span></div>`
-  ).join('');
-
-  document.getElementById('mbody').innerHTML = `
-    <div class="mname">${x(c.nombre)}</div>
-    <div class="maddr">${x(c.dir)}</div>
-    <div style="margin-bottom:14px">
-      <span class="nbadge nb-${c.nivel||'none'}" style="font-size:13px;padding:5px 14px">
-        ${nL[c.nivel]||'Sin nivel'}
-      </span>
-    </div>
-    ${filas}
-    <div style="display:flex;gap:8px;margin-top:14px">
-      ${!c.synced ? `<button type="button" onclick="retrySingle('${x(c.syncId)}')"
-        style="flex:1;padding:13px;background:rgba(0,196,244,.1);border:1.5px solid var(--accent);
-        color:var(--accent);border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;
-        min-height:48px;touch-action:manipulation;-webkit-appearance:none">↑ Sincronizar</button>` : ''}
-      <button type="button" onclick="del('${x(c.syncId)}')"
-        style="flex:1;padding:13px;background:rgba(239,68,68,.1);border:1.5px solid var(--red);
-        color:var(--red);border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;
-        min-height:48px;touch-action:manipulation;-webkit-appearance:none">🗑 Eliminar</button>
-    </div>`;
-
-  document.getElementById('moverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeModal() {
-  document.getElementById('moverlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-document.getElementById('moverlay').addEventListener('click', e=>{
-  if (e.target===document.getElementById('moverlay')) closeModal();
-});
-
-async function retrySingle(syncId) {
-  const c = clients.find(cl=>cl.syncId===syncId);
-  if (!c || c.synced) return;
-  if (!pending.find(p=>p.syncId===syncId)) pending.push(c);
-  lsSet(LS_PENDING, pending);
-  closeModal();
-  await flush(true);
-  renderList();
-}
-
-async function del(syncId) {
-  if (!confirm('¿Eliminar este cliente?\nNo se puede deshacer.')) return;
-
-  clients = clients.filter(c=>c.syncId!==syncId);
-  pending = pending.filter(p=>p.syncId!==syncId);
-  lsSet(LS_PENDING, pending);
-  lsSet(LS_DATA, clients.filter(c=>c.synced));
-
-  closeModal();
-  renderList();
-  toast('Cliente eliminado','warn');
-
-  // Intentar eliminar en Sheets
-  if (navigator.onLine && URL_GAS !== 'TU_URL_AQUI') {
-    try {
-      await gas({ action:'delete', syncId });
-      setSbar('s-ok',`${clients.length} registros · Sincronizado ✓`);
-    } catch(e) {
-      // No está en pending de add, así que no lo reintentamos automáticamente.
-      // El registro simplemente queda en Sheets como "basura" — se limpia a mano desde Sheets.
-      // Para 320 clientes esto es perfectamente aceptable.
-    }
-  }
 }
 
 /* ─── ESCAPE HTML ───────────────────────────────────────────
